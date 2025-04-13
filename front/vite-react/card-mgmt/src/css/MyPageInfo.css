@@ -1,0 +1,112 @@
+.mypage-info {
+    background-color: #ffffff;
+    font-family: 'Raleway', sans-serif;
+  }
+  
+  .mypage-info .container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 60vh;
+  }
+  
+  .mypage-info .card {
+    width: 450px;
+    max-width: 500px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    border: 1px solid #ddd;
+  }
+
+  .mypage-info h1 {
+    font-size: 2.0rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+  
+  .mypage-info .card-body {
+    padding: 40px 50px;
+  }
+  
+  .mypage-info .title {
+    font-size: 2.8rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+  
+  .mypage-info .form-label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #555;
+  }
+  
+  .mypage-info .form-control {
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    background-color: #f8f9fa;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    width: 100%;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+  }
+  
+  .mypage-info .form-control:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
+    background-color: #fff;
+  }
+  
+  .mypage-info .profile-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .mypage-info .profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #c8ced6;
+    margin-bottom: 0;
+  }
+  
+  .mypage-info .profile-info {
+    margin-left: 20px;
+  }
+  
+  .mypage-info .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .mypage-info .btn {
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    color: #fff;
+    border: none;
+    max-width: none;
+  }
+  
+  .mypage-info .btn-success {
+    background-color: #198653;
+    margin-bottom: 0;
+  }
+  
+  .mypage-info .btn-danger {
+    background-color: #dc3545;
+  }
+  

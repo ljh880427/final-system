@@ -1,0 +1,108 @@
+.card-detail-page .container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 60vh;
+  }
+  
+  .card-detail-page button {
+    margin-top: 20px;
+  }
+  
+  .card-detail-page .card {
+    margin-top: 47px;
+    max-width: 900px;
+    width: 100%;
+    border-radius: 30px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    padding: 5px 40px 40px 40px;
+    border: 2px solid #ddd;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  @media (max-width: 768px) {
+    .card-detail-page .card {
+      padding: 10px;
+    }
+  }
+  
+  .card-detail-page .profile-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .card-detail-page .profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #00796b;
+    cursor: pointer;
+    margin-right: 20px;
+  }
+  
+  .card-detail-page .btn-primary,
+  .card-detail-page .btn-danger {
+    width: 100%;
+    font-size: 1.2rem;
+    padding: 12px;
+    border: none;
+    transition: all 0.3s ease-in-out;
+    border-radius: 15px;
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  .card-detail-page .btn-primary {
+    background: #00796b;
+  }
+  
+  .card-detail-page .btn-danger {
+    background: #d4001a;
+  }
+  
+  .card-detail-page .form-label {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #333;
+  }
+  
+  .card-detail-page .form-control {
+    border-radius: 10px;
+    padding: 8px;
+    font-size: 1.2rem;
+    background: #f9f9f9;
+    color: #222;
+    border: 2px solid #bbb;
+  }
+  
+  .card-detail-page .card-title {
+    font-size: 2.0rem;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+    color: #222;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  
+  .card-detail-page .button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .card-detail-page label {
+    margin-left: 5px;
+  }
+  
+  .card-detail-page input {
+    margin-bottom: 10px;
+  }
+  
+  .card-detail-page .mb-4 {
+    margin-bottom: 0 !important;
+  }
+  

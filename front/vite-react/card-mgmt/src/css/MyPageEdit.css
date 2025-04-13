@@ -1,0 +1,117 @@
+/* MyPageEdit.css */
+.mypage-edit body {
+    background-color: #ffffff;
+    font-family: 'Raleway', sans-serif;
+  }
+  
+  .mypage-edit .container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 60vh;
+  }
+  
+  .mypage-edit .card {
+    width: 450px;
+    max-width: 500px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    border: 1px solid #ddd;
+    margin-top:25px;
+  }
+  
+  .mypage-edit .card-body {
+    padding: 20px 50px;
+  }
+  
+  .mypage-edit h1 {
+    font-size: 2.0rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+  
+  .mypage-edit .form-label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 5;
+  }
+  
+  .mypage-edit .form-control {
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    background-color: #f8f9fa;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    margin-top: 0;
+  }
+  
+  .mypage-edit .form-control:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
+    background-color: #fff;
+  }
+  
+  .mypage-edit .btn {
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    max-width: none;
+  }
+  
+  .mypage-edit .form-footer {
+    text-align: center;
+    margin-top: 30px;
+    color: #777;
+  }
+  
+  .mypage-edit .form-footer p {
+    font-size: 1rem;
+  }
+  
+  .mypage-edit .input-group {
+    position: relative;
+  }
+  
+  .mypage-edit .input-group .form-control {
+    padding-left: 50px;
+  }
+  
+  .mypage-edit .input-group-text {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    color: #555;
+    font-size: 1.2rem;
+  }
+  
+  .mypage-edit .form-group {
+    margin-bottom: 20px;
+  }
+
+  .mypage-edit .btn-success {
+    background-color: #198653;
+    margin-bottom: 0;
+    margin-top: 10px;
+  }
+  
+  .mypage-edit .profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 0;
+    border: 2px solid #c8ced6;
+  }
+  

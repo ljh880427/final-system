@@ -1,0 +1,45 @@
+@media (max-width: 560px) {
+    .side-slide-menu {
+      display: flex;
+      flex-direction: column;      
+      align-items: center; /* 교차 축에서 중앙 정렬 */
+      position: fixed;
+      top: 0;
+      right: -260px;
+      width: 250px;
+      height: 100vh;
+      background-color: white;
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.15);
+      padding: 1rem 1rem 2rem;
+      transition: right 0.3s ease-in-out;
+      z-index: 1050;
+    }
+  
+    .side-slide-menu.show {
+      right: 0;
+      display: flex !important;
+    }
+  
+    .side-slide-menu .navbar-nav {
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* 리스트 항목 중앙 정렬 */
+      width: 100%;
+    }
+  
+    .side-slide-menu .nav-item {
+      margin: 0.8rem 0;
+    }
+  
+    .side-slide-menu .nav-link {
+      font-size: 1.1em;
+    }
+  
+    .side-toggle {
+      align-self: flex-start;
+      background: none;
+      border: none;
+      margin-bottom: 1rem;
+    }
+  }
+  
