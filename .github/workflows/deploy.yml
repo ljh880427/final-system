@@ -1,0 +1,27 @@
+name: Deploy to Main Server
+
+on:
+  push:
+    branches:
+      - main  # main 브랜치에 push 실행
+
+jobs:
+  deploy-main:
+    if: github.ref == 'refs/heads/main'  # main 브랜치일 때만 실행
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy to Server
+        env:
+          HOST: ${{ secrets.SERVER_HOST }}
+          USER: ${{ secrets.SERVER_USER }}
+          PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+          PORT: ${{ secrets.SERVER_PORT }}
+        run: |
+          sshpass -p "${PASSWORD}" ssh -p ${PORT} -o StrictHostKeyChecking=no ${USER}@${HOST} << 'EOF'
+            cd ~  # 서버 내 / 디렉토리로 이동            
+            nohup ./start.sh > /dev/null 2>&1 &
+          EOF
