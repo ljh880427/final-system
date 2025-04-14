@@ -138,8 +138,9 @@ public class OAuthServiceImp implements OAuthService {
       //model.addAttribute("cardInfos", cardInfos);
       //model.addAttribute("cardPictureUri", hostingUri + "/file/uri/"); // 명함 프로필+명함사진
       result.put("cardInfos", cardInfos);
-      result.put("cardPictureUri", "/file/uri/"); // 명함 프로필+명함사진
     }
+
+    result.put("cardPictureUri", "/file/uri/"); // 명함 프로필+명함사진
 
     return ResponseEntity.ok(result);
   }
