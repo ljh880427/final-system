@@ -72,7 +72,7 @@ public class OAuthServiceImp implements OAuthService {
 
     String userNo = utils.getUserNo(request);
 
-    if(userNo != "") {
+    if(userNo != null && !userNo.trim().isEmpty()) {
       int UserNo = Integer.parseInt(userNo);
       OAuthClient oAuthClient = oAuthClientRepository.findByNoAndUseYN(UserNo, 'Y');
 
