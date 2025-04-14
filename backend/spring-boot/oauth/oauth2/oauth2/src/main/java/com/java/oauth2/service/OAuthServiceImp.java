@@ -119,6 +119,9 @@ public class OAuthServiceImp implements OAuthService {
       result.put("name", social_userinfo.getName());
       result.put("email", social_userinfo.getEmail());
 
+      OAuthClient social_oAuthClient = oAuthClientRepository.findByNoAndUseYN(social_userinfo.getId(), 'Y');
+      result.put("PhotoNo", "/file/uri/" + social_oAuthClient.getFileNo());
+
       log.info("social result : {}", result);
       //return "main";
     }
