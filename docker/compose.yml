@@ -55,9 +55,7 @@ services:
     container_name: spring
     restart: always
     depends_on:
-      - db
-    links:
-      - db
+      - db    
     ports:
       - "5000:9000"
     networks:
@@ -70,7 +68,7 @@ services:
       - DB_USERNAME=root
       - DB_PASSWORD=1234
       - TZ=Asia/Seoul
-      - LC_ALL:en_US.UTF-8
+      - LC_ALL=en_US.UTF-8
     volumes:
       - ./spring:/usr/local/app:ro
     command: java -jar /usr/local/app/spring.jar
