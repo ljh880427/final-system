@@ -326,6 +326,16 @@ public class OAuthServiceImp implements OAuthService {
         result.put("status", "logout");
       }
 
+      HttpSession session = request.getSession();
+      CustomOAuth2User social_userinfo = null;
+      social_userinfo = UserUtils.getCustomOAuth2User(request);
+      log.info("social_userinfo : {}", social_userinfo);
+
+      // 소셜로그인 값이 있는경우
+      if (social_userinfo != null) {
+        userNo = String.valueOf(social_userinfo.getId());
+      }
+
       OAuthClient oAuthClient = oAuthClientRepository.findById(Integer.parseInt(userNo)).orElseThrow();
 
       if(file != null) {
