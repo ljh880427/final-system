@@ -114,6 +114,7 @@ public class OAuthServiceImp implements OAuthService {
       //model.addAttribute("issuer", social_userinfo.getIssuer());
       //model.addAttribute("name", social_userinfo.getName());
       //model.addAttribute("email", social_userinfo.getEmail());
+      result.put("no", social_userinfo.getId());
       result.put("issuer", social_userinfo.getIssuer());
       result.put("name", social_userinfo.getName());
       result.put("email", social_userinfo.getEmail());

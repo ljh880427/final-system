@@ -47,7 +47,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     // response.getWriter().append(new Gson().toJson(oAuth2User));
 
     // 인증 후 리디렉션할 URL로 이동
-    response.sendRedirect("/");
+    //response.sendRedirect("/");
+    response.sendRedirect("https://l.0neteam.co.kr/");
   }
 
 }
