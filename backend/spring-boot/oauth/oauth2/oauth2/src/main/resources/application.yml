@@ -42,7 +42,7 @@ spring:
           naver:
             client-id: AdW3oSJzkVBOScg8OywV
             client-secret: Z09d3N6o3m
-            redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
+            redirect-uri: "https://l.0neteam.co.kr/oauth2/callback/naver"
             authorization-grant-type: authorization_code
             client-authentication-method: client_secret_post
             scope: email
