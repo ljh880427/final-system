@@ -300,6 +300,7 @@ public class OAuthServiceImp implements OAuthService {
             .build();
     response.addHeader(HttpHeaders.SET_COOKIE, targetCookie.toString());
 
+    //소셜 로그인 세션 삭제
     if (session != null) {
       session.removeAttribute("SPRING_SECURITY_CONTEXT");
     }
