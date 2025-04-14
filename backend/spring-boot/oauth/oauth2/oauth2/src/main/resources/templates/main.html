@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+<main layout:fragment="content"  class="container-fluid my-4" style="margin-left:0; margin-right:0; width: 100%;">
+
+    <link rel="stylesheet" href="/css/oauth/main.css">
+
+    <div class="container-fluid">
+        <div class="main-container">
+            <div class="form-user" th:if="${email != null and email != ''}">
+                <!-- 프로필 사진 -->
+
+                <img th:if="${PhotoNo != null and PhotoNo != ''}" th:src="|${PhotoNo}|" alt="Profile Picture" class="profile-img" >
+
+                <!-- profilePhto 값이 null이거나 빈 문자열일 경우 -->
+                <img th:if="${PhotoNo == null or PhotoNo == ''}" src="https://static.nid.naver.com/images/web/user/default.png?type=s160" alt="Profile Picture" class="profile-img" onclick="document.getElementById('file-input').click();">
+
+                <!-- 로그인 사용자 이름 -->
+                <br/>
+
+                <div class="username" style="font-size: 1.6em; font-weight: bold;" th:text="${name}"></div>
+
+                <!-- 사용자 이메일 -->
+                <div class="user-email" style="font-size: 1.4em; color: #666;" th:text="${email}"></div> <br/>
+
+
+                <!-- 명함 등록 -->
+                <button class="btn btn-lg btn-primary btn-block btn-center" style="width:250px;" onclick="regCard()"> 명함 등록 </button>
+
+            </div>
+
+            <div class="content-wrapper">
+                <div class="tabs">
+                    <div class="tab active" onclick="switchTab('cardlist')">명함목록</div>
+                    <div class="tab" onclick="switchTab('writereg')">명함입력</div>
+                    <div class="tab" onclick="switchTab('picturereg')">사진등록</div>
+                </div>
+
+
+                <div id="cardlist" class="tab-content  active">
+                    <!-- 검색 입력창과 버튼 -->
+                    <div style="margin: 20px 0; display: flex; justify-content: flex-start; align-items: center;">
+                        <input type="text" id="searchInput" placeholder="이름, 직위, 회사명으로 명함을 검색 해주세요"
+                               style="padding: 10px 15px; border-radius: 30px; border: 2px solid #007bff; width: 350px; font-size: 16px; margin-right: 10px; transition: border-color 0.3s ease-in-out;">
+                        <button onclick="searchCards()"
+                                style="width:120px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 30px; font-size: 16px; cursor: pointer; transition: background-color 0.3s ease;">
+                            검색
+                        </button>
+                    </div>
+
+                    <br/>
+
+                    <div class="post-list" style="display: flex; flex-wrap: wrap; gap: 15px;">
+
+                        <div th:each="cardInfo : ${cardInfos}" class="post-card" style="width: 320px; display: flex; flex-direction: column; align-items: center; padding: 20px; text-align: center; position: relative;"
+                             th:data-card-no="${cardInfo.no}"
+                             onclick="CardInfoDetail(this)">
+
+                            <img th:if="${cardInfo.fileUserNo == 0}" src="https://static.nid.naver.com/images/web/user/default.png?type=s160" class="profile-img" style="width: 100px; height: 100px; margin-bottom: 15px;">
+                            <img th:if="${cardInfo.fileUserNo != null and cardInfo.fileUserNo != '' and cardInfo.fileUserNo != 0}" th:src="|${cardPictureUri}${cardInfo.fileUserNo}|" class="profile-img" style="width: 100px; height: 100px; margin-bottom: 15px;">
+
+                            <!-- 삭제 버튼 -->
+                            <button class="delete-btn"
+                                    th:onclick="|event.stopPropagation(); deleteCard(this, '${cardInfo.No}')|"
+                                    style="position: absolute; top: 10px; right: 10px; background: transparent; border: none; font-size: 20px; color: #007bff; cursor: pointer; font-weight: bold;">&times;</button>
+
+                            <!-- 이름과 직위 -->
+                            <div class="username" style="font-size: 1.4em; font-weight: bold; color: #333;" th:text="${cardInfo.name}">이름</div>
+                            <div class="position" style="font-size: 1.1em; font-weight: 500; color: #007bff; margin-bottom: 10px;" th:text="${cardInfo.position}">직위</div>
+
+                            <div th:if="${cardInfo.filePictureNo != null and cardInfo.filePictureNo != '' and cardInfo.filePictureNo != 0}" style="width: 100%; min-height: 120px; text-align: left; padding: 10px; background: #f8f9fa; border-radius: 10px;">
+                                <div class="cardreg-img-container">
+                                    <img th:src="|${cardPictureUri}${cardInfo.filePictureNo}|" alt="Profile Picture" class="cardreg-img" >
+                                </div>
+                            </div>
+
+                            <!-- 연락처 정보 -->
+                            <div th:if="${cardInfo.filePictureNo != null and cardInfo.filePictureNo != '' and cardInfo.filePictureNo == 0}" style="width: 100%; min-height: 120px; text-align: left; padding: 10px; background: #f8f9fa; border-radius: 10px;">
+                                <p style="margin: 5px 0;"><strong>Tel:</strong> <span th:text="${cardInfo.tel}">전화번호</span></p>
+                                <p style="margin: 5px 0;"><strong>Fax:</strong> <span th:text="${cardInfo.fax}">팩스번호</span></p>
+                                <p style="margin: 5px 0;"><strong>Email:</strong> <span th:text="${cardInfo.email}">이메일</span></p>
+                                <p style="margin: 5px 0;"><strong>Address:</strong> <span th:text="${cardInfo.adr}">주소</span></p>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+                <div id="writereg" class="tab-content">
+                    <div class="post-list" style="display: flex; flex-wrap: wrap; gap: 15px;">
+                        <form id="regForm" style="width:100%">
+                            <!-- 회사명 -->
+                            <div class="form-row">
+                                <!-- 이름 -->
+                                <div class="form-column form-group">
+                                    <label for="company">회사명</label>
+                                    <input type="text" id="company" name="company" class="form-control" placeholder="회사명을 입력하세요" >
+                                </div>
+                                <!-- 직위 -->
+                                <div class="form-column form-group">
+                                    <label for="position">포지션</label>
+                                    <input type="text" id="position" name="position" class="form-control" placeholder="직위를 입력하세요" >
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <!-- 상세주소 -->
+                                <div class="form-column form-group">
+                                    <label for="name">이름 <span style="color: red;">*</span></label>
+                                    <input type="text" id="name" name="name" class="form-control" placeholder="이름을 입력하세요" required>
+                                </div>
+                                <!-- 주소 -->
+                                <div class="form-column form-group">
+                                    <label for="adr">주소</label>
+                                    <input type="text" id="adr" name="adr" class="form-control" placeholder="주소를 입력하세요" >
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <!-- 이메일 -->
+                                <div class="form-column form-group">
+                                    <label for="email">메일</label>
+                                    <input type="email" id="email" name="email" class="form-control" placeholder="이메일을 입력하세요" >
+                                </div>
+                                <!-- 전화 -->
+                                <div class="form-column form-group">
+                                    <label for="tel">전화 <span style="color: red;">*</span></label>
+                                    <input type="tel" id="tel" name="tel" class="form-control" placeholder="전화번호를 입력하세요" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <!-- 팩스 -->
+                                <div class="form-column form-group">
+                                    <label for="fax">팩스</label>
+                                    <input type="tel" id="fax" name="fax" class="form-control" placeholder="팩스번호를 입력하세요">
+                                </div>
+                                <!-- 메모 -->
+                                <div class="form-column form-group">
+                                    <label for="memo">메모</label>
+                                    <input id="memo" name="memo" class="form-control" placeholder="메모를 입력하세요">
+                                </div>
+                            </div>
+
+                            <!-- 제출 버튼 -->
+                            <div class="more-button-container" style="display: flex; justify-content: center; margin-top: 20px;">
+                                <button type="submit" class="btn btn-lg btn-primary" style="width:250px; margin-top:20px;">명함 등록</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+                <div id="picturereg" class="tab-content">
+                    <div class="post-list" style="display: flex; justify-content: center; align-items: center;">
+                        <form id="PictureRegForm" style="max-width: 500px; width: 100%; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center;">
+
+                            <!-- 프로필 사진 & 명함 사진을 가로 정렬 (모바일에서는 세로 정렬) -->
+                            <div class="picture-container">
+
+                                <!-- 프로필 사진 -->
+                                <div class="form-column form-group profilereg" style="display: flex; flex-direction: column; align-items: center; text-align: center; width: 200px; margin-right:100px;">
+                                    <label style="margin-bottom: 5px;">(프로필 사진)</label>
+                                    <img src="https://static.nid.naver.com/images/web/user/default.png?type=s160"
+                                         alt="Profile Picture" class="profile-img" id="regProfile"
+                                         onclick="document.getElementById('file-input-profile').click();"
+                                         style="cursor: pointer;">
+                                       <!-- 파일 업로드 input -->
+                                    <input type="file" class="file-input" id="file-input-profile" name="file" accept="image/*" onchange="regProfileupdateProfileImage(event)" style="display: none;">
+                                </div>
+
+                                <!-- 명함 사진 등록 -->
+                                <div class="form-column form-group" style="display: flex; flex-direction: column; align-items: center; text-align: center; width: 200px;">
+                                    <label style="margin-bottom: 5px;">명함 사진 등록</label>
+                                    <img src="/img/card.png"
+                                         alt="Profile Picture" class="cardreg-img" id="regCard"
+                                         onclick="document.getElementById('file-input-card').click();"
+                                         style="cursor: pointer;">
+                                    <!-- 파일 업로드 input -->
+                                    <input type="file" class="file-input" id="file-input-card" name="file" accept="image/*" onchange="regCardupdateProfileImage(event)" style="display: none;">
+                                </div>
+
+
+                            </div> <!-- 사진 정렬 div 끝 -->
+
+                            <!-- 이름 입력 -->
+                            <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                <label for="name" style="white-space: nowrap; margin-top:10px;"><span style="color: red;">*</span> 이름 :</label>
+                                <input type="text" id="picture_card_name" name="name" class="form-control" placeholder="이름을 입력하세요" style="flex: 1; max-width: 400px;" required>
+                            </div>
+
+                            <!-- 전화번호 입력 -->
+                            <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                <label for="tel" style="white-space: nowrap; margin-top:10px;"><span style="color: red;">*</span> 전화 :</label>
+                                <input type="tel" id="picture_card_tel" name="tel" class="form-control" placeholder="전화번호를 입력하세요" style="flex: 1; max-width: 400px;" required>
+                            </div>
+
+                            <!-- 제출 버튼 -->
+                            <button type="submit" class="btn btn-lg btn-primary" style="width: 250px; margin-top:20px;">명함 등록</button>
+                        </form>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/oauth/main.js" type="text/javascript" ></script>
+
+</main>
+</html>

@@ -72,7 +72,7 @@ services:
       - TZ=Asia/Seoul
       - LC_ALL:en_US.UTF-8
     volumes:
-      - ./app:/usr/local/app:ro
+      - ./spring:/usr/local/app:ro
     command: java -jar /usr/local/app/spring.jar
 
 networks:

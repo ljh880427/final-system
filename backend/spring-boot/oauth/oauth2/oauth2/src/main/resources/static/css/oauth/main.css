@@ -1,0 +1,345 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Arial', sans-serif; /* 폰트 스타일 변경 */
+
+}
+
+.main-container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    /*background-color: #f4f7fc;*/ /* 배경 색상 변경 */
+}
+
+.form-user {
+    width: 350px;
+    height : 500px;
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    text-align: center;
+    flex-shrink: 0;
+    background-color: #ffffff;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+/* 수정된 입력 필드 스타일 */
+.form-control {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 1.1em;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: #f7f7f7;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #007bff;
+    background-color: #ffffff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+}
+
+.form-group input {
+    margin-top: 10px; /* 👈 입력 필드 위쪽 여백 추가 */
+}
+
+/* 2열 레이아웃 적용 */
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; /* 여백 추가 */
+}
+
+.form-column {
+    width: 48%; /* Width of each column */
+}
+
+.profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 30px;
+    border: 3px solid #c8ced6;
+}
+
+/*
+.cardreg-img {
+    width: 300px;
+    height: 200px;
+    border-radius: 10%;
+    object-fit: cover;
+    margin-bottom: 30px;
+    border: 3px solid #c8ced6;
+}
+*/
+
+.cardreg-img-container {
+    width: 250px;
+    height: 200px;
+    border-radius: 10%;
+    overflow: hidden; /* 라운드 처리를 유지하면서 내부 이미지가 넘치지 않도록 설정 */
+    border: 3px solid #c8ced6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0; /* 배경색 추가 (필요 시) */
+}
+
+.cardreg-img {
+    width: 95%; /* 내부 이미지 크기 조절 */
+    height: auto;
+}
+
+.content-wrapper {
+    flex-grow: 1;
+    /*padding: 40px;*/
+    /*margin: 0 20px 0 45px;  상, 우측, 하단, 왼쪽 마진 순서대로 */
+    margin: 0 auto;
+    max-width: 1500px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    position: relative; /* 버튼을 오른쪽 아래에 고정할 수 있도록 */
+    border: 1px solid #cccccc; /* 진한 테두리 추가 */
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 30px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 15px;
+    background: #f8f9fa;
+    transition: background 0.3s ease, color 0.3s ease;
+    flex: 1;
+    text-align: center;
+    position: relative;
+}
+
+.tab:hover {
+    background: #007bff;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.tab.active {
+    background: linear-gradient(135deg, #007bff, #00bcd4); /* 그라디언트 배경 */
+    color: white;
+}
+
+.tab.active:before {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40%;
+    height: 3px;
+    background: #ffffff;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+.tab:hover:before {
+    width: 60%;
+}
+
+.tab-content {
+    display: none;
+    padding: 25px;
+    /*border: 2px solid #007bff;*/
+    border-radius: 10px;
+    font-size: 1.2em;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+
+.more-button-container {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 끝에 정렬 */
+    margin-top: 20px; /* 콘텐츠와 버튼 사이의 여백 */
+}
+
+.btn-link:hover {
+    color: #0056b3; /* hover 시 색상 변경 */
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #007bff, #00bcd4); /* 그라데이션 배경 */
+    border: none; /* 기본 테두리 제거 */
+    color: white; /* 글자 색상 */
+    transition: background 0.3s ease; /* 배경색 변화에 대한 부드러운 전환 효과 */
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, #00bcd4, #007bff); /* hover 시 그라데이션 방향 반대로 */
+}
+
+/* 명함 목록 */
+.post-list {
+    display: flex;
+    flex-wrap: wrap; /* 각 항목이 한 줄에 3개씩 나오도록 wrap을 유지 */
+    gap: 15px;
+}
+
+.post-card {
+    width: calc(33.33% - 15px); /* 한 줄에 3개씩 가로로 나열되도록 너비 조정 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid #007bff; /* 왼쪽 파란색 테두리 추가 */
+    transition: transform 0.3s, box-shadow 0.3s, border-left 0.3s; /* hover 시 왼쪽 테두리 색상 변화 */
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+    border-left: 5px solid #00bcd4; /* hover 시 왼쪽 테두리 색상 변경 */
+}
+
+
+.post-card a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.post-card a:hover {
+    text-decoration: underline;
+}
+
+
+.btn {
+    font-size: 1.2em;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-lg {
+    padding: 8px 30px;
+    font-size: 1.5em;
+}
+
+/* 기본적으로 가로 정렬 */
+.picture-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* 사진 간격 */
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-column {
+        width: 100%;
+    }
+
+    .form-user {
+        margin-left : 10px;
+        width: 350px;
+        height: 500px;
+        padding: 0;
+        padding-top: 70px;
+        margin-bottom: 25px;
+    }
+
+    .tabs {
+        font-size: 0.9em;
+    }
+
+    .form-row {
+        display: block;
+    }
+
+    .post-card {
+        font-size: 1.1em;
+        flex-direction: column; /* 세로 방향으로 변경 */
+        align-items: flex-start; /* 왼쪽 정렬 */
+    }
+
+    .post-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        width: 100%; /* 또는 충분히 넓은 고정 너비 설정 */
+    }
+
+    .tab-content {
+        width: 350px;
+    }
+
+    /* 모바일 화면에서 명함 등록 버튼 중앙 정렬 */
+    .more-button-container {
+        display: flex;
+        justify-content: center; /* 수평 중앙 정렬 */
+        margin-top: 20px;
+    }
+
+    .btn {
+        width: 100%; /* 버튼이 부모 요소의 너비를 가득 채우도록 설정 */
+        max-width: 250px; /* 최대 너비 제한 */
+    }
+
+    .picture-container {
+        flex-direction: column; /* 세로 정렬 */
+        gap: 10px; /* 요소 간격 줄이기 */
+    }
+
+    #cardlist {
+        width:400px;
+    }
+
+
+}
+
+@media (max-width: 1121px) {
+    .main-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .form-user {
+        margin-right: 20px;
+    }
+
+    .content-wrapper {
+        /*width: 95%;*/
+        margin-top: 20px;
+    }
+
+}

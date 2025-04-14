@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+<main layout:fragment="content" class="container my-4">
+
+    <link rel="stylesheet" href="/css/oauth/CardEdit.css">
+
+    <div class="container">
+        <div class="card">
+            <form id="EditDetailForm">
+
+                <input type="hidden" name="cardNo" id="cardNo" th:value="${cardInfo.no}">
+
+                <h3 class="card-title" >명함 수정</h3>
+                <div class="profile-section" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <img th:if="${cardInfo.fileUserNo == 0}"
+                             src="https://static.nid.naver.com/images/web/user/default.png?type=s160"
+                             class="profile-img"
+                             id="user-img-default"
+                             onclick="EditUserSetTargetImage('user-img-default')">
+
+                        <img th:if="${cardInfo.fileUserNo != null and cardInfo.fileUserNo != '' and cardInfo.fileUserNo != 0}"
+                             th:src="|${cardPictureUri}${cardInfo.fileUserNo}|"
+                             class="profile-img"
+                             id="user-img-uploaded"
+                             onclick="EditUserSetTargetImage('user-img-uploaded')">
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; width: 200px; margin-left: auto;">
+                        <div th:if="${cardInfo.filePictureNo == 0}" class="form-column form-group">
+                            <img src="/img/card.png"
+                                 alt="Profile Picture" class="cardreg-img"
+                                 style="cursor: pointer; width: 190px;"
+                                 id="picture-img-default"
+                                 onclick="EditPictureSetTargetImage('picture-img-default')">
+                        </div>
+
+                        <div th:if="${cardInfo.filePictureNo != null and cardInfo.filePictureNo != '' and cardInfo.filePictureNo != 0}" class="form-column form-group">
+                            <img th:src="|${cardPictureUri}${cardInfo.filePictureNo}|"
+                                 alt="Profile Picture" class="cardreg-img"
+                                 style="cursor: pointer; width: 190px;"
+                                 id="picture-img-uploaded"
+                                 onclick="EditPictureSetTargetImage('picture-img-uploaded')">
+                        </div>
+                    </div>
+
+                    <input type="file" class="file-input" id="file-input-profile-editdetail" name="file" accept="image/*" onchange="EditUserProfileupdateImage(event)" style="display: none;">
+                    <input type="file" class="file-input" id="file-input-card-editdetail" name="file" accept="image/*" onchange="EditCardupdateProfileImage(event)" style="display: none;">
+                </div>
+
+
+                <div class="row mb-4">
+                    <div class="col-12 col-md-6">
+                        <label for="company" class="form-label">회사명</label>
+                        <input type="text" id="company" name="company" class="form-control" placeholder="회사명을 입력하세요" th:value="${cardInfo.company}" >
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="position" class="form-label">포지션</label>
+                        <input type="text" id="position" name="position" class="form-control" placeholder="직위를 입력하세요" th:value="${cardInfo.position}" >
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-12 col-md-6">
+                        <label for="name" class="form-label">이름 <span style="color: red;">*</span></label>
+                        <input type="text" id="name" name="name" class="form-control" placeholder="(필수) 이름을 입력하세요" th:value="${cardInfo.name}" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="adr" class="form-label">주소</label>
+                        <input type="text" id="adr" name="adr" class="form-control" placeholder="주소를 입력하세요" th:value="${cardInfo.adr}" >
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-12 col-md-6">
+                        <label for="email" class="form-label">메일</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="이메일을 입력하세요" th:value="${cardInfo.email}" >
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="tel" class="form-label">전화 <span style="color: red;">*</span></label>
+                        <input type="tel" id="tel" name="tel" class="form-control" placeholder="(필수) 전화번호를 입력하세요" th:value="${cardInfo.tel}" required>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-12 col-md-6">
+                        <label for="fax" class="form-label">팩스</label>
+                        <input type="tel" id="fax" name="fax" class="form-control" placeholder="팩스번호를 입력하세요" th:value="${cardInfo.fax}">
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="memo" class="form-label">메모</label>
+                        <input type="text" id="memo" name="memo" class="form-control" placeholder="메모를 입력하세요" th:value="${cardInfo.memo}">
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">완료</button>
+                    <button type="button" class="btn btn-danger" th:data-card-no="${cardInfo.no}"
+                            onclick="CardInfoDetail(this)">취소</button>
+                </div>
+
+            </form>
+        </div>
+
+    <script src="/js/oauth/CardEdit.js" type="text/javascript" ></script>
+
+    </div>
+</main>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+<main layout:fragment="content" class="container my-4">
+
+    <link rel="stylesheet" href="/css/oauth/MyPageEdit.css">
+
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1>내 정보 수정</h1>
+                <form action="/file/upload"  method="post" id="MyPageEditForm">
+
+                    <div class="form-group mb-4">
+                        <!-- 프로필 사진 -->
+                        <!-- profilePhto 값이 null이 아니거나 빈 문자열이 아니면 -->
+                        <img th:if="${PhotoNo != null and PhotoNo != ''}" th:src="|${PhotoNo}|" alt="Profile Picture" class="profile-img" onclick="document.getElementById('file-input').click();">
+
+                        <!-- profilePhto 값이 null이거나 빈 문자열일 경우 -->
+                        <img th:if="${PhotoNo == null or PhotoNo == ''}" src="https://static.nid.naver.com/images/web/user/default.png?type=s160" alt="Profile Picture" class="profile-img" onclick="document.getElementById('file-input').click();">
+
+                        <!-- 파일 업로드 input -->
+                        <input type="file" class="file-input" id="file-input" name="file"  accept="image/*" onchange="updateProfileImage(event)" style="display: none;">
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="email" class="form-label">이메일</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="이메일을 입력하세요" th:value="${oAuthClient.email}" readonly> <!-- 라운드 처리된 이메일 입력칸 -->
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="name" class="form-label">이름</label>
+                        <input type="text" id="name" name="name" class="form-control" placeholder="이름을 입력하세요" th:value="${oAuthClient.name}" required>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="pwd" class="form-label">새 비밀번호</label>
+                        <input type="password" id="pwd" name="pwd" class="form-control" placeholder="새 비밀번호를 입력하세요" required>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="confirm-pwd" class="form-label">비밀번호 확인</label>
+                        <input type="password" id="confirm-pwd" name="confirm-pwd" class="form-control" placeholder="비밀번호를 다시 입력하세요" required>
+                    </div>
+                    <br/>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-success flex-fill">수정 완료</button>
+                        <button type="button" class="btn btn-danger" onclick="window.location.href='/MyPageInfo'">취소</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/oauth/MyPageEdit.js" type="text/javascript" ></script>
+
+
+</main>
+</html>

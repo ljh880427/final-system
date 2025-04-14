@@ -1,0 +1,47 @@
+/* Google Font을 사용하여 스타일리시한 글씨체 추가 */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+        
+/* header animation set */
+.text-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* header animation set */
+.letter {
+    display: inline-block;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    font-size: 3rem;  /* 글씨 크기 조정 */
+    letter-spacing: 3px; /* 글자 간격 조정 */
+    font-weight: bold; /* 글씨 두껍게 */
+}
+
+/* header 배경색 그라디언트 지정 */
+.header-bg-custom {
+    background: linear-gradient(135deg, #3ED4BE, #A3E4D7); /* 청록색과 라이트 청록색 그라디언트 */
+    display: flex; /* Flexbox 사용 중앙 정렬 */ 
+ 	justify-content: center; /* 수평 중앙 정렬 */
+ 	align-items: center; /* 수직 중앙 정렬 */
+ 	height:80px;
+}
+        
+      
+
+.animated-text {
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4); /* 텍스트에 그림자 추가 */                
+}
+        
+
+/* home animation set */
+@keyframes fadeIn {
+    0% {
+        opacity: 0; /* 시작할 때 완전히 보이지 않음 */
+    }
+    100% {
+        opacity: 1; /* 끝날 때 완전히 보이도록 설정 */
+    }
+}

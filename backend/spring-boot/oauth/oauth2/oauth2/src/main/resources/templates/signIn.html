@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+<main layout:fragment="content" class="container my-4">
+
+    <link rel="stylesheet" href="/css/oauth/signIn.css">
+    <!-- Bootstrap CSS -->
+<!--    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">-->
+<!--    &lt;!&ndash; Font Awesome &ndash;&gt;-->
+<!--    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" rel="stylesheet">-->
+
+    <div class="container">
+        <div class="container text-center">
+            <form class="form-signin" id="signInForm" method="POST" action="/signIn">
+                <h2 class="form-signin-heading">Sign in</h2>
+                <small class="text-muted" style="font-size:11px;">Connect Cafe & Blog with your favorite social network</small>
+                <br><br>
+
+                <p>
+                    <a class="btn " href="/oauth2/login/facebook" style="padding: 1px 6px;">
+                        <img src="/img/facebook.png" alt="Facebook" style="width: 55px; height: 50;"/>
+                    </a>
+                    <a class="btn " href="/oauth2/login/naver" style="padding: 1px 6px;">
+                        <img src="/img/naver.png" alt="Naver" style="width: 55px; height: 50;"/>
+                    </a>
+                </p>
+                <p>
+                    <a class="btn " href="/oauth2/login/kakao" style="padding: 1px 6px;">
+                        <img src="/img/kakao.png" alt="KaKao" style="width: 55px; height: 50;"/>
+                    </a>
+                    <a class="btn " href="/oauth2/login/google" style="padding: 1px 6px;">
+                        <img src="/img/google.png" alt="KaKao" style="width: 55px; height: 50;"/>
+                    </a>
+
+                </p>
+
+                <small class="text-muted" style="font-size:11px;">Or sign in with cafe & blog</small>
+                <br><br>
+
+                <input class="form-control login-input" type="email" name="email" id="email" placeholder="Email Address" required>                
+
+                <input class="form-control login-input-pass" name="pwd" id="pwd" placeholder="Password" type="password" required>
+
+                <button class="btn btn-lg btn-primary btn-block btn-center" style="margin-bottom:10px;" type="submit">Sign in</button>
+                <br>
+                <small class="create-account text-muted" style="font-size:11px; margin-bottom:10px;">Don't have a cafe & blog or social network account?</small>
+                <a href="/signUp">
+                    <button class="btn btn-sm btn-outline-secondary" type="button" style="width:70px; height:30px; font-size:11px;" >sign Up</button>
+                </a>
+            </form>
+        </div>
+    </div>
+
+    <!-- jQuery and Bootstrap JS -->
+<!--    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>-->
+<!--    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>-->
+<!--    &lt;!&ndash; Axios &ndash;&gt;-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>-->
+    <script src="/js/oauth/signIn.js" type="text/javascript" ></script>
+
+
+</main>
+</html>

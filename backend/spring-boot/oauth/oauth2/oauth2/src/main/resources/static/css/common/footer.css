@@ -1,0 +1,8 @@
+/* footer 높이설정 및 글씨 가운데 정렬 */
+.footer-bg-custom {
+	background: #D3D3D3; /* 옅은 회색 배경 */
+	height: 50px;
+	display: flex; /* Flexbox 사용 중앙 정렬 */ 
+	justify-content: center; /* 수평 중앙 정렬 */
+	align-items: center; /* 수직 중앙 정렬 */
+}     
