@@ -80,8 +80,8 @@ public class OAuthClientController {
   }
 
   @GetMapping("/oauth2/logout")
-  public ResponseEntity<?> logout(Model model, HttpServletResponse response) {
-    return oAuthService.logout(model,response);
+  public ResponseEntity<?> logout(Model model, HttpServletResponse response, HttpSession session) {
+    return oAuthService.logout(model,response,session);
   }
 
   @ResponseBody

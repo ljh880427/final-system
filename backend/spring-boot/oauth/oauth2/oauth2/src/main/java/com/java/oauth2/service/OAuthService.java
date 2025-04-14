@@ -25,7 +25,7 @@ public interface OAuthService {
 
     public Map<String, String> getToken(OauthReqDTO oauthReqDTO);
 
-    public ResponseEntity<?> logout(Model model, HttpServletResponse response);
+    public ResponseEntity<?> logout(Model model, HttpServletResponse response, HttpSession session);
 
     public ResponseEntity<?> MyPageInfo(HttpServletRequest request, Model model);
     public ResponseEntity<?> MyPageEdit(HttpServletRequest request, Model model);

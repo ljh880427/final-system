@@ -286,7 +286,7 @@ public class OAuthServiceImp implements OAuthService {
             .getBody();
   }
 
-  public ResponseEntity<?> logout(Model model, HttpServletResponse response) {
+  public ResponseEntity<?> logout(Model model, HttpServletResponse response, HttpSession session) {
 
     Map<String, Object> result = new HashMap<>();
 
@@ -299,6 +299,10 @@ public class OAuthServiceImp implements OAuthService {
             .maxAge(0)
             .build();
     response.addHeader(HttpHeaders.SET_COOKIE, targetCookie.toString());
+
+    if (session != null) {
+      session.removeAttribute("SPRING_SECURITY_CONTEXT");
+    }
 
 //    model.addAttribute("cafeList", postRepository.findTop10ByMenuNoBoardNoType(1, Sort.by(Sort.Order.desc("no"))));
 //    model.addAttribute("blogList", postRepository.findTop10ByMenuNoBoardNoType(2, Sort.by(Sort.Order.desc("no"))));
