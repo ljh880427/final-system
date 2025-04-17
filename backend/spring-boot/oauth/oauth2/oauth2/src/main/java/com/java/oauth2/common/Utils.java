@@ -18,9 +18,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Slf4j
@@ -31,6 +34,8 @@ public class Utils {
     private final JwtDecoder jwtDecoder;
 
     private final JWKSet jwkSet;
+
+    private final JwtAuthenticationConverter jwtAuthenticationConverter;
 
     public String getUserNo (HttpServletRequest request) {
 
@@ -97,7 +102,8 @@ public class Utils {
     }
 
 
-    public boolean login_Authentication (OAuthClient oAuthClient, HttpServletRequest request) {
+    public boolean login_Authentication(OAuthClient oAuthClient,
+                                        HttpServletRequest request) {
 
         boolean status = false;
 
@@ -148,6 +154,55 @@ public class Utils {
         }
 
         return status;
+    }
+
+
+    public boolean Update_login_Authentication( HttpServletRequest request, String access_token) {
+
+        try {
+            // 기존 인증 정보
+            Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
+            if (currentAuth == null) {
+                System.out.println("❌ 현재 인증 정보가 없습니다. 업데이트 중단");
+                return false;
+            }
+
+            // 기존 principal, credentials 유지
+            Object principal = currentAuth.getPrincipal();
+            Object credentials = currentAuth.getCredentials();
+
+            Collection<GrantedAuthority> combinedAuthorities = new ArrayList<>();
+            combinedAuthorities.addAll(currentAuth.getAuthorities()); // 기존 세션 권한목록
+
+            Jwt jwt = jwtDecoder.decode(access_token); // jwt scope 권한 추가
+
+            Collection<? extends GrantedAuthority> jwtAuthorities =
+                    jwtAuthenticationConverter.convert(jwt).getAuthorities();
+            combinedAuthorities.addAll(jwtAuthorities); // ✅ scope 권한 추가
+
+            // 새 권한 목록 설정 (예: SCOPE_read 추가)
+            List<GrantedAuthority> newAuthorities = new ArrayList<>(combinedAuthorities);
+
+            // 새 인증 객체 생성
+            Authentication updatedAuth = new UsernamePasswordAuthenticationToken(principal, credentials, newAuthorities);
+
+            // SecurityContext 교체
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            context.setAuthentication(updatedAuth);
+            SecurityContextHolder.setContext(context);
+
+            // 세션에도 반영
+            HttpSession session = request.getSession(true);
+            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, context);
+
+            System.out.println("✅ 인증 권한이 업데이트됨: " + newAuthorities);
+
+        }catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
 }

@@ -272,11 +272,7 @@ public class OAuthServiceImp implements OAuthService {
 
       OAuthClient oAuthClient = oAuthClientRepository.findByNoAndUseYN(Integer.parseInt(userNo), 'Y');
 
-      System.out.println("oAuthClient1 : " + oAuthClient);
-
       boolean authlogin_status = utils.login_Authentication(oAuthClient, request); // 사용자 권한 ROLE_ 및 사용자 로그인 처리
-
-      System.out.println("authlogin_status : " + authlogin_status);
 
       status = authlogin_status;
 
@@ -370,6 +366,9 @@ public class OAuthServiceImp implements OAuthService {
       System.out.println("access_token = " + access_token);
       System.out.println("refresh_token = " + refresh_token);
 
+      // 사용자 권한 업데이트 (필요시 룰 수정)
+      utils.Update_login_Authentication(request, access_token);
+
       Cookie cookie_access_token = new Cookie("access_token", access_token);
 
       cookie_access_token.setHttpOnly(true); // JavaScript에서 접근 불가
@@ -448,6 +447,9 @@ public class OAuthServiceImp implements OAuthService {
 
       System.out.println("new access_token = " + access_token);
       System.out.println("new refresh_token = " + refresh_token);
+
+      // 사용자 권한 업데이트 (필요시 룰 수정)
+      utils.Update_login_Authentication(request, access_token);
 
       Cookie cookie_access_token = new Cookie("access_token", access_token);
 

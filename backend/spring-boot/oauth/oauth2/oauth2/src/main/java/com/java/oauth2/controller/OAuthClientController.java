@@ -15,7 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,6 +42,11 @@ public class OAuthClientController {
 
   @GetMapping("")
   public ResponseEntity<?> home(@RequestParam(required = false) String searchKeyWord, @AuthenticationPrincipal CustomOAuth2User oAuth2User, Model model, HttpServletRequest request, HttpServletResponse response, @RequestHeader(value = "Authorization", defaultValue = "") String authorizationHeader) {
+
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    System.out.println("현재 인증 객체: " + auth);
+    System.out.println("권한 목록: " + auth.getAuthorities());
+
     return oAuthService.getLoginInfo(searchKeyWord, request, model);
   }
 
