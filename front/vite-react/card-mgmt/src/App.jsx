@@ -9,6 +9,7 @@ import CardDetail from './CardDetail';  // 카드 디테일 정보(상세)
 import CardEdit from './CardEdit'; // 카드 수정 컴포넌트 추가
 import MyPageInfo from './MyPageInfo'; // 카드 수정 컴포넌트 추가
 import MyPageEdit from './MyPageEdit'; // 카드 수정 컴포넌트 추가
+import OAuthCallback from './OAuthCallback'; // 로그인 code callback 컴포넌트 추가
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/edit/:cardNo" element={<CardEdit />} /> 
         <Route path="/MyPageInfo/:id" element={<MyPageInfo />} /> 
         <Route path="/MyPageEdit/:id" element={<MyPageEdit />} /> 
+        <Route path="/callback/custom" element={<OAuthCallback />} />
       </Routes>
     </Router>
   );
