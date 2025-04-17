@@ -9,6 +9,14 @@ export default function OAuthCallback() {
 
   const isCalled = useRef(false); // 중복요청 방지1
 
+  // ✅ '/signIn' 접근 시 무조건 로그아웃 이동
+  useEffect(() => {
+    if (location.pathname === '/signIn') {
+      navigate('/logout');
+    }
+  }, [location.pathname]);
+
+  // ✅ OAuth code 처리 로직
   useEffect(() => {
     if (isCalled.current) return;
     isCalled.current = true;
@@ -22,11 +30,16 @@ export default function OAuthCallback() {
       setCode(codeParam); // code 값 셋팅
 
       try {
-        const response = await axios.post(`/api/TokenFromAuthCode`, { code: codeParam }, { withCredentials: true });
+        const response = await axios.post(
+          `/api/TokenFromAuthCode`,
+          { code: codeParam },
+          { withCredentials: true }
+        );
         if (response.data.status === true) {
           navigate('/');
         } else {
           console.log("토큰 생성 오류");
+          navigate('/logout');
         }
       } catch (error) {
         console.error("Error exchanging code for token:", error);

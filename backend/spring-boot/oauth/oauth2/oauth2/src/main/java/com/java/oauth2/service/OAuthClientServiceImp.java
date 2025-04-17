@@ -12,6 +12,8 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,11 +37,12 @@ public class OAuthClientServiceImp implements OAuthClientService {
   }
 
   public RegisteredClient loadClientByResult(OAuthClient oAuthClient, HttpServletRequest request) {
-
     System.out.println("oAuthClient - loadClientByResult : " + oAuthClient);
 
-    // 머신 투 머신 등록
-    return RegisteredClient
+    // 예: OAuthClient에 getScopes()라는 메서드가 있고, List<String> 타입을 반환한다고 가정
+    List<String> scopes = Arrays.asList("read", "write", "delete"); // 예: ["read", "write", "delete"]  oAuthClient.getScopes();
+
+    RegisteredClient.Builder builder = RegisteredClient
             .withId(String.valueOf(oAuthClient.getNo()))
             .clientName(oAuthClient.getName())
             .clientId(oAuthClient.getEmail())
@@ -51,24 +54,29 @@ public class OAuthClientServiceImp implements OAuthClientService {
             .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
             .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
 
-            .redirectUri("https://l.0neteam.co.kr/callback/custom") // ✅ redirect URI 필
+            .redirectUri("http://l.0neteam.co.kr:5173/callback/custom")
 
-            .scope("read")
-            //.scope("write")
-
-            // 클라이언트 애플리케이션이 사용자에게 "권한 요청"을 할 때, 사용자 동의(consent)를 요구할지 여부를 설정 (true: 동의 화면을 띄움, false: 동의패스)
             .clientSettings(ClientSettings.builder()
                     .requireAuthorizationConsent(false)
                     .build())
 
-            // 리플레쉬 토큰 셋팅 설정
+//          .scope("read")    // 수동 scope 입력시
+//          .scope("write")
+
             .tokenSettings(TokenSettings.builder()
                     .accessTokenTimeToLive(Duration.ofMinutes(30))
                     .refreshTokenTimeToLive(Duration.ofDays(7))
-                    .reuseRefreshTokens(true) // or false
-                    .build())
+                    .reuseRefreshTokens(true)
+                    .build());
 
-            .build();
+    // 리스트로 받은 스코프들 추가
+    if (scopes != null) {
+      for (String scope : scopes) {
+        builder.scope(scope);
+      }
+    }
+
+    return builder.build();
   }
 
 }
