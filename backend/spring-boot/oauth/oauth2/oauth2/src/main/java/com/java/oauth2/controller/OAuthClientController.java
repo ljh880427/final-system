@@ -79,6 +79,11 @@ public class OAuthClientController {
     return oAuthService.signIn(model, oauthReqDTO, response, request, session);
   }
 
+  @PostMapping("/getCodeUrl")
+  public ResponseEntity<String> getCodeUrl(@RequestBody Map<String, String> body, HttpServletRequest request) {
+    return oAuthService.getCodeUrl(body, request);
+  }
+
   @PostMapping("/TokenFromAuthCode")
   public ResponseEntity<?> TokenFromAuthCode(
           @RequestBody Map<String, String> body,
