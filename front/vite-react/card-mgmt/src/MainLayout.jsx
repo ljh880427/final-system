@@ -98,30 +98,48 @@ const handleSubmit = async (e) => {
       ? `${API_BASE}?searchKeyWord=${encodeURIComponent(keyword)}`
       : `${API_BASE}`;
 
-    axios.get(apiUrl, { withCredentials: true })
-      .then((res) => {
-        const data = res.data;
-
-        if (data.status === 'logout') {
-          navigate('/logout');
-          return;
+    // 유저 로그인 정보가 있을경우에만 토큰 리플레시 실행
+  if (user.no) {
+    // access token refresh 요청
+    const refreshToken = async () => {
+      try {
+        const refresh_status = await axios.get(`${API_BASE}/RefreshToken`, { withCredentials: true });
+        if (refresh_status.data.status === true) {
+          console.log("token refresh complete");
+        } else {
+          console.log("token refresh fail!");
         }
+      } catch (error) {
+        console.error("token refresh error:", error);
+      }
+    };   
+    refreshToken(); // 토큰 리프레시 먼저 실행
+  }
 
-        setUser({
-          no: data.no || '',
-          name: data.name || '',
-          email: data.email || '',
-          PhotoNo: data.PhotoNo || ''
-        });
+  axios.get(apiUrl, { withCredentials: true })
+    .then((res) => {
+      const data = res.data;
 
-        if (data.cardPictureUri) {
-          setCardImageBaseUri(data.cardPictureUri);
-        }
+      if (data.status === 'logout') {
+        navigate('/logout');
+        return;
+      }
 
-        //if (data.PhotoNo) setProfileImage(data.PhotoNo);
-        if (data.cardInfos) setCards(data.cardInfos);
-      })
-      .catch((err) => console.error("데이터 로딩 실패:", err));
+      setUser({
+        no: data.no || '',
+        name: data.name || '',
+        email: data.email || '',
+        PhotoNo: data.PhotoNo || ''
+      });
+
+      if (data.cardPictureUri) {
+        setCardImageBaseUri(data.cardPictureUri);
+      }
+
+      //if (data.PhotoNo) setProfileImage(data.PhotoNo);
+      if (data.cardInfos) setCards(data.cardInfos);
+    })
+    .catch((err) => console.error("데이터 로딩 실패:", err));
   };
 
   // 컴포넌트 마운트 시와 searchKeyword 변경 시 데이터 가져오기

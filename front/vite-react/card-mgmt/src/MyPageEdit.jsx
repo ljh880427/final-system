@@ -20,6 +20,21 @@ export default function MyPageEdit() {
   const API_BASE = import.meta.env.VITE_API_BASE;
 
   useEffect(() => {
+
+    // access token refresh 요청
+    const refreshToken = async () => {
+      try {
+        const refresh_status = await axios.get(`${API_BASE}/RefreshToken`, { withCredentials: true });
+        if (refresh_status.data.status === true) {
+          console.log("token refresh complete");
+        } else {
+          console.log("token refresh fail!");
+        }
+      } catch (error) {
+        console.error("token refresh error:", error);
+      }
+    };   
+    refreshToken(); // 토큰 리프레시 먼저 실행
     
     axios.get(`${API_BASE}/MyPageEdit`, { withCredentials: true })
       .then((res) => {
