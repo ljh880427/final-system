@@ -238,7 +238,8 @@ public class AuthorizationConfig {
                 builder.expiresAt(Instant.now().plus(30, ChronoUnit.MINUTES)); // access_token 30분
 
                 builder.claims((claims) -> {
-                    claims.put("scope", client.getScopes());  // 클라이언트의 스코프 정보 추가
+                    //claims.put("scope", client.getScopes()); // ❌ 클라이언트가 등록한 전체 scope
+                    claims.put("scope", context.getAuthorizedScopes()); // ✅ 사용자가 인가 code와 같이 요청한 scope
                 });
                                 
                 System.out.println("test ClientName : " + client.getClientName());
