@@ -7,14 +7,7 @@ export default function OAuthCallback() {
   const navigate = useNavigate();
   const [code, setCode] = useState(null);
 
-  const isCalled = useRef(false); // 중복요청 방지1
-
-  // ✅ '/signIn' 접근 시 무조건 로그아웃 이동
-  useEffect(() => {
-    if (location.pathname === '/signIn') {
-      navigate('/logout');
-    }
-  }, [location.pathname]);
+  const isCalled = useRef(false); // 중복요청 방지1 
 
   // ✅ OAuth code 처리 로직
   useEffect(() => {
