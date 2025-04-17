@@ -54,14 +54,14 @@ public class OAuthClientServiceImp implements OAuthClientService {
             .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
             .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
 
-            .redirectUri("http://l.0neteam.co.kr:5173/callback/custom")
+            .redirectUri("https://l.0neteam.co.kr/callback/custom")
 
             .clientSettings(ClientSettings.builder()
                     .requireAuthorizationConsent(false)
                     .build())
 
-//          .scope("read")    // 수동 scope 입력시
-//          .scope("write")
+  //        .scope("read")    // 수동 scope 입력시
+  //        .scope("write")
 
             .tokenSettings(TokenSettings.builder()
                     .accessTokenTimeToLive(Duration.ofMinutes(30))
