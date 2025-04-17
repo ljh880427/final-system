@@ -272,7 +272,11 @@ public class OAuthServiceImp implements OAuthService {
 
       OAuthClient oAuthClient = oAuthClientRepository.findByNoAndUseYN(Integer.parseInt(userNo), 'Y');
 
+      System.out.println("oAuthClient1 : " + oAuthClient);
+
       boolean authlogin_status = utils.login_Authentication(oAuthClient, request); // 사용자 권한 ROLE_ 및 사용자 로그인 처리
+
+      System.out.println("authlogin_status : " + authlogin_status);
 
       status = authlogin_status;
 
