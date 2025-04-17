@@ -284,16 +284,16 @@ public class OAuthServiceImp implements OAuthService {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
         //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용자가 로그인되어 있지 않습니다.");
-        System.out.println("현재 사용자가 로그인되어 있지 않습니다.");
-      }else {
-        System.out.println("로그인된 상태입니다.");
+        System.out.println("The current user is not logged in.");
+      } else {
+        System.out.println("User is logged in.");
       }
 
       if (authentication instanceof AnonymousAuthenticationToken) {
-        System.out.println("익명 사용자입니다.");
+        System.out.println("User is anonymous.");
       } else {
-        String username = authentication.getName(); // 또는 getPrincipal().toString()
-        System.out.println("로그인된 사용자: " + username);
+        String username = authentication.getName(); // or getPrincipal().toString()
+        System.out.println("Logged-in user: " + username);
       }
       /// /////////////////////////////////////////////////////////////////////////
 
