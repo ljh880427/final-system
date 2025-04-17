@@ -31,7 +31,7 @@ services:
       - MYSQL_PORT=3306
       - MYSQL_ROOT_PASSWORD=1234
       - MYSQL_DATABASE=card
-      - MYSQL_USER=root
+    #  - MYSQL_USER=root
       - MYSQL_PASSWORD=1234
       - TZ=Asia/Seoul
     networks:
