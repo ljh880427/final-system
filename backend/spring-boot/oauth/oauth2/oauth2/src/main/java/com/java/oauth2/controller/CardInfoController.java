@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.HashMap;
 import java.util.Map;
 
+@EnableMethodSecurity(prePostEnabled = true)  // ★ ROLE_ 룰을 정의할때 이거 꼭 필요함
 @CrossOrigin(origins = { "http://localhost:5178", "http://l.0neteam.co.kr:5178" }, allowCredentials = "true")
 @RequestMapping("/api")
 @Slf4j
@@ -30,6 +32,8 @@ public class CardInfoController {
 
     private final CardService cardService;
 
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')") // 두 가지 권한 중 하나라도 있으면 허용 (OR)
+    //@PreAuthorize("hasRole('ADMIN') and hasRole('SUPERUSER')") // 두 가지 권한을 모두 가지고 있어야 허용 (AND)
     @GetMapping("/card/detail")
     public ResponseEntity<?> getCardInfoDetail(@RequestParam("cardNo") String cardNo, Model model, HttpServletRequest request) {
         return cardService.getCardInfoDetail(cardNo, model, request);
