@@ -15,18 +15,30 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [pwd, setPwd] = useState('');
   const navigate = useNavigate();
+  const code = location.state?.code || null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const API_BASE = import.meta.env.VITE_API_BASE;
-      const response = await axios.post(`${API_BASE}/signIn`, { email, pwd }, { withCredentials: true });
-      console.log(response);
-      if (response.data.status === true) {        
-        console.log('로그인 성공');
-        navigate('/'); // ✅ 로그인 성공 시 홈으로 이동
-      } else {
-        alert('로그인 실패');
+
+      if(code !== null) {
+
+        navigate('/'); // ✅ 로그인 및 코드GET 성공 시 홈으로 이동  
+
+      } else {        
+        const response = await axios.post(`${API_BASE}/signIn`, { email, pwd }, { withCredentials: true });
+        console.log(response);
+        if (response.data.status === true) {        
+          console.log('로그인 성공');
+          const { data: redirectUrl } = await axios.post(`${API_BASE}/getCodeUrl`, { email }, { withCredentials: true });
+          window.location.href = redirectUrl;
+          // 리다이렉트!
+          console.log(redirectUrl);
+          
+        } else {
+          alert('로그인 실패');
+        }        
       }
     } catch (error) {
       console.error('로그인 에러:', error);

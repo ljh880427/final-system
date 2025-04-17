@@ -22,24 +22,35 @@ export default function CardDetail() {
   };
 
   useEffect(() => {
-    axios
-      .get(`${API_BASE}/card/detail?cardNo=${id}`, { withCredentials: true })
-      .then((res) => {
-        console.log(res);
+    const fetchData = async () => {
+      try {
+
+        //access token refresh 설정
+        const refresh_status = await axios.get(`${API_BASE}/RefreshToken`, { withCredentials: true });
+        if(refresh_status.data.status === true){
+          console.log("token refresh complete");
+        }else{
+          console.log("token refresh fail!");
+        }
+  
+        const res = await axios.get(`${API_BASE}/card/detail?cardNo=${id}`, {
+          withCredentials: true
+        });
+  
         if (res.data.status === true) {
           setCardData(res.data.cardInfo);
           setCardPictureUri(res.data.cardPictureUri);
-          setUser({
-            no: res.data.no || ''
-          });
+          setUser({ no: res.data.no || '' });
         } else {
           alert('명함 정보를 불러올 수 없습니다.');
           navigate('/');
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error('명함 상세 조회 실패:', err);
-      });
+      }
+    };
+  
+    fetchData();
   }, [id]);
 
   if (!cardData) return <div>로딩 중...</div>;

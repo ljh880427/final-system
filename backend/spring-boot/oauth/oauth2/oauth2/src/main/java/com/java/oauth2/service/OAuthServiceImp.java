@@ -22,6 +22,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -41,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j
 @Service
@@ -240,7 +244,9 @@ public class OAuthServiceImp implements OAuthService {
     return ResponseEntity.ok(result);
   }
 
-  public ResponseEntity<?> signIn (Model model, @RequestBody OauthReqDTO oauthReqDTO, HttpServletResponse response, HttpSession session) {
+  public ResponseEntity<?> signIn (Model model, @RequestBody OauthReqDTO oauthReqDTO, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
+
+    session.setAttribute("client_secret_" + oauthReqDTO.getEmail(), oauthReqDTO.getPwd());
 
     Map<String, Object> result = new HashMap<>();
 
@@ -259,6 +265,33 @@ public class OAuthServiceImp implements OAuthService {
       cookie.setPath("/"); //
       cookie.setMaxAge(session.getMaxInactiveInterval());
       response.addCookie(cookie);
+
+
+      Jwt jwt = jwtDecoder.decode(access_token);
+      String userNo = (String) jwt.getClaims().get("userNo");
+
+      OAuthClient oAuthClient = oAuthClientRepository.findByNoAndUseYN(Integer.parseInt(userNo), 'Y');
+
+      boolean authlogin_status = utils.login_Authentication(oAuthClient, request);
+
+      status = authlogin_status;
+
+      /// ///////////////////////////////////////////////////////////////////////
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+        //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용자가 로그인되어 있지 않습니다.");
+        System.out.println("현재 사용자가 로그인되어 있지 않습니다.");
+      }else {
+        System.out.println("로그인된 상태입니다.");
+      }
+
+      if (authentication instanceof AnonymousAuthenticationToken) {
+        System.out.println("익명 사용자입니다.");
+      } else {
+        String username = authentication.getName(); // 또는 getPrincipal().toString()
+        System.out.println("로그인된 사용자: " + username);
+      }
+      /// /////////////////////////////////////////////////////////////////////////
 
 //      model.addAttribute("cafeList", postRepository.findTop10ByMenuNoBoardNoType(1, Sort.by(Sort.Order.desc("no"))));
 //      model.addAttribute("blogList", postRepository.findTop10ByMenuNoBoardNoType(2, Sort.by(Sort.Order.desc("no"))));
@@ -292,19 +325,238 @@ public class OAuthServiceImp implements OAuthService {
             .getBody();
   }
 
+  @Override
+  public ResponseEntity<String> getCodeUrl(Map<String, String> body, HttpServletRequest request) {
+    // 로그인 상태 확인
+//    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//    if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+//      //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용자가 로그인되어 있지 않습니다.");
+//      System.out.println("현재 사용자가 로그인되어 있지 않습니다.");
+//    }else {
+//      System.out.println("로그인된 상태입니다.");
+//    }
+//
+//    if (authentication instanceof AnonymousAuthenticationToken) {
+//      System.out.println("익명 사용자입니다.");
+//    } else {
+//      String username = authentication.getName(); // 또는 getPrincipal().toString()
+//      System.out.println("로그인된 사용자: " + username);
+//    }
+
+    String clientId = body.get("email");
+    String redirectUri = "https://l.0neteam.co.kr/callback/custom";
+    String scope = "read";
+    String state = "123";
+
+    System.out.println("getCodeUrl Start");
+
+    String userNo = utils.getUserNo(request);
+
+    System.out.println("getCodeUrl userNo : " + userNo);
+
+    String url = UriComponentsBuilder.fromHttpUrl(hostingUri + "/oauth2/authorize") // hostingUri로 바꿔도 됨
+            .queryParam("response_type", "code")
+            .queryParam("client_id", clientId)
+            .queryParam("redirect_uri", redirectUri)
+            .queryParam("scope", scope)
+            .queryParam("state", state)
+            .build()
+            .toUriString();
+
+    return ResponseEntity.ok(url);
+  }
+
+  public ResponseEntity<?> TokenFromAuthCode(String code, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+    System.out.println("TokenFromAuthCode START");
+
+    Map<String, Object> result = new HashMap<>();
+
+    boolean status = true;
+    try {
+      Map<String, String> resultMap = getTokenFromAuthCode(code, request, session);
+      String access_token = resultMap.get("access_token");
+      String refresh_token = resultMap.get("refresh_token");
+
+      System.out.println("access_token = " + access_token);
+      System.out.println("refresh_token = " + refresh_token);
+
+      Cookie cookie_access_token = new Cookie("access_token", access_token);
+
+      cookie_access_token.setHttpOnly(true); // JavaScript에서 접근 불가
+      //cookie.setSecure(true); // HTTPS에서만 전송
+      cookie_access_token.setPath("/"); //
+      cookie_access_token.setMaxAge(session.getMaxInactiveInterval());
+      response.addCookie(cookie_access_token);
+
+      Cookie cookie_refresh_token = new Cookie("refresh_token", refresh_token);
+
+      cookie_refresh_token.setHttpOnly(true); // JavaScript에서 접근 불가
+      //cookie.setSecure(true); // HTTPS에서만 전송
+      cookie_refresh_token.setPath("/"); //
+      cookie_refresh_token.setMaxAge(session.getMaxInactiveInterval());
+      response.addCookie(cookie_refresh_token);
+
+    } catch (Exception e) {
+      status = false;
+      log.info("status : {}", status);
+      log.info("Exception occurred: {}", e);
+
+    }
+
+    result.put("status", status);
+    return ResponseEntity.ok(result);
+  }
+
+  public Map<String, String> getTokenFromAuthCode(String code, HttpServletRequest request, HttpSession session) {
+
+    System.out.println("getTokenFromAuthCode START");
+
+    System.out.println("authCode : " + code);
+
+    MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+
+    String redirectUri = "https://l.0neteam.co.kr/callback/custom";
+
+    String userNo = utils.getUserNo(request);
+
+    if(userNo != null){
+      OAuthClient oAuthClient = oAuthClientRepository.findById(Integer.parseInt(userNo)).orElseThrow();
+
+      String client_secret = (String) session.getAttribute("client_secret_" + oAuthClient.getEmail());
+
+      System.out.println("getTokenFromAuthCode - oAuthClient : " + oAuthClient);
+
+      formData.add("grant_type", "authorization_code");
+      formData.add("code", code);
+      formData.add("client_id", oAuthClient.getEmail());
+      formData.add("client_secret", client_secret);
+      formData.add("redirect_uri", redirectUri);
+
+    }
+
+    return RestClient.create().post()
+            .uri(hostingUri + "/oauth2/token")
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .body(formData)
+            .retrieve()
+            .toEntity(Map.class)
+            .getBody();
+  }
+
+
+  public ResponseEntity<?> RefreshToken(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+    System.out.println("RefreshToken START");
+
+    Map<String, Object> result = new HashMap<>();
+
+    boolean status = false;
+    try {
+      Map<String, String> resultMap = getRefreshAccessToken(request, session);
+      String access_token = resultMap.get("access_token");
+      String refresh_token = resultMap.get("refresh_token");
+
+      System.out.println("new access_token = " + access_token);
+      System.out.println("new refresh_token = " + refresh_token);
+
+      Cookie cookie_access_token = new Cookie("access_token", access_token);
+
+      cookie_access_token.setHttpOnly(true); // JavaScript에서 접근 불가
+      //cookie.setSecure(true); // HTTPS에서만 전송
+      cookie_access_token.setPath("/"); //
+      cookie_access_token.setMaxAge(session.getMaxInactiveInterval());
+      response.addCookie(cookie_access_token);
+
+      Cookie cookie_refresh_token = new Cookie("refresh_token", refresh_token);
+
+      cookie_refresh_token.setHttpOnly(true); // JavaScript에서 접근 불가
+      //cookie.setSecure(true); // HTTPS에서만 전송
+      cookie_refresh_token.setPath("/"); //
+      cookie_refresh_token.setMaxAge(session.getMaxInactiveInterval());
+      response.addCookie(cookie_refresh_token);
+
+      status = true;
+
+    } catch (Exception e) {
+      status = false;
+      log.info("status : {}", status);
+      log.info("Exception occurred: {}", e);
+
+    }
+
+    result.put("status", status);
+    return ResponseEntity.ok(result);
+  }
+
+
+  public Map<String, String> getRefreshAccessToken(HttpServletRequest request, HttpSession session) {
+
+    System.out.println("getRefreshAccessToken START");
+
+    MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+
+    String userNo = utils.getUserNo(request);
+
+    if(userNo != null) {
+      OAuthClient oAuthClient = oAuthClientRepository.findById(Integer.parseInt(userNo)).orElseThrow();
+
+      String client_secret = (String) session.getAttribute("client_secret_" + oAuthClient.getEmail());
+      String refresh_token = utils.getRefreshToken(request);
+
+      formData.add("grant_type", "refresh_token");
+      formData.add("refresh_token", refresh_token);
+      formData.add("client_id", oAuthClient.getEmail());
+      formData.add("client_secret", client_secret); // 실제 secret 사용
+    }
+
+    return RestClient.create().post()
+            .uri(hostingUri + "/oauth2/token")
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .body(formData)
+            .retrieve()
+            .toEntity(Map.class)
+            .getBody();
+  }
+
   public ResponseEntity<?> logout(Model model, HttpServletResponse response, HttpSession session) {
 
     Map<String, Object> result = new HashMap<>();
 
     System.out.println("logout test");
-    // cookie 초기화
-    ResponseCookie targetCookie = ResponseCookie.from("access_token", "")
+
+    // access_token 삭제
+    ResponseCookie accessTokenCookie = ResponseCookie.from("access_token", "")
+            .httpOnly(true)
+            //.secure(true)  // 프로덕션에서는 활성화
+            .path("/")
+            .maxAge(0)
+            .build();
+    //헤더에 추가
+    response.addHeader(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
+
+
+    // refresh_token 삭제
+    ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", "")
             .httpOnly(true)
             //.secure(true)
             .path("/")
             .maxAge(0)
             .build();
-    response.addHeader(HttpHeaders.SET_COOKIE, targetCookie.toString());
+    //헤더에 추가
+    response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+
+
+    // JSESSIONID 삭제
+    ResponseCookie jsessionIdCookie = ResponseCookie.from("JSESSIONID", "")
+            .httpOnly(true)
+            //.secure(true)
+            .path("/")
+            .maxAge(0)
+            .build();
+    //헤더에 추가
+    response.addHeader(HttpHeaders.SET_COOKIE, jsessionIdCookie.toString());
+
 
     //소셜 로그인 세션 삭제
     if (session != null) {

@@ -75,9 +75,29 @@ public class OAuthClientController {
 
   @ResponseBody
   @PostMapping("/signIn")
-  public ResponseEntity<?> signIn(Model model, @RequestBody OauthReqDTO oauthReqDTO, HttpServletResponse response, HttpSession session) {
-    return oAuthService.signIn(model, oauthReqDTO, response, session);
+  public ResponseEntity<?> signIn(Model model, @RequestBody OauthReqDTO oauthReqDTO, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
+    return oAuthService.signIn(model, oauthReqDTO, response, request, session);
   }
+
+  @PostMapping("/TokenFromAuthCode")
+  public ResponseEntity<?> TokenFromAuthCode(
+          @RequestBody Map<String, String> body,
+          HttpServletRequest request,
+          HttpServletResponse response,
+          HttpSession session) {
+
+    String code = body.get("code");
+
+    System.out.println("Controller TokenFromAuthCode Code : " + code);
+
+    return oAuthService.TokenFromAuthCode(code, request, response, session);
+  }
+
+  @GetMapping("/RefreshToken")
+  public ResponseEntity<?> RefreshToken(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    return oAuthService.RefreshToken(request,response, session);
+  }
+
 
   @GetMapping("/oauth2/logout")
   public ResponseEntity<?> logout(Model model, HttpServletResponse response, HttpSession session) {

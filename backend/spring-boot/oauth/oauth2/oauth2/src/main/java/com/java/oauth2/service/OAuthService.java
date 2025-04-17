@@ -21,7 +21,7 @@ public interface OAuthService {
 
     public ResponseEntity<?> Signup (@RequestBody OauthReqDTO oauthReqDTO);
 
-    public ResponseEntity<?> signIn (Model model, @RequestBody OauthReqDTO oauthReqDTO, HttpServletResponse response, HttpSession session);
+    public ResponseEntity<?> signIn (Model model, @RequestBody OauthReqDTO oauthReqDTO, HttpServletResponse response, HttpServletRequest request, HttpSession session);
 
     public Map<String, String> getToken(OauthReqDTO oauthReqDTO);
 
@@ -35,4 +35,10 @@ public interface OAuthService {
                                              @RequestParam("name") String name,
                                              @RequestParam("pwd") String pwd,
                                              HttpServletRequest request);
+
+    public ResponseEntity<String> getCodeUrl(@RequestBody Map<String, String> body, HttpServletRequest request);
+
+    public ResponseEntity<?> TokenFromAuthCode(String code, HttpServletRequest request, HttpServletResponse response, HttpSession session);
+
+    public ResponseEntity<?> RefreshToken(HttpServletRequest request, HttpServletResponse response, HttpSession session);
 }

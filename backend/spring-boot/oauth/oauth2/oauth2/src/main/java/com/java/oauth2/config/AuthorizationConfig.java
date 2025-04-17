@@ -13,6 +13,7 @@ import com.nimbusds.jose.proc.JWSKeySelector;
 import com.nimbusds.jose.proc.JWSVerificationKeySelector;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.nimbusds.jwt.proc.DefaultJWTProcessor;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +34,8 @@ import org.springframework.security.oauth2.server.authorization.token.JwtEncodin
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -166,11 +169,15 @@ public class AuthorizationConfig {
             public void save(RegisteredClient registeredClient) {}
             @Override
             public RegisteredClient findById(String id) {
-                return oAuthClientService.findById(id);  // ID로 클라이언트 조회
+                System.out.println("AuthorizationConfig -  : " + id);
+                HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+                return oAuthClientService.findById(id, request);  // ID로 클라이언트 조회
             }
             @Override
             public RegisteredClient findByClientId(String email) {
-                return oAuthClientService.findByClientId(email);  // 이메일로 클라이언트 조회
+                System.out.println("AuthorizationConfig - findByClientId : " + email);
+                HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+                return oAuthClientService.findByClientId(email, request);  // 이메일로 클라이언트 조회
             }
         };
     }
@@ -227,7 +234,8 @@ public class AuthorizationConfig {
                 JwtClaimsSet.Builder builder = context.getClaims();
 
                 builder.issuer("Oauth2_Server");  // 발급자 설정
-                builder.expiresAt(Instant.now().plus(1, ChronoUnit.DAYS));  // 만료 시간 설정
+                //builder.expiresAt(Instant.now().plus(1, ChronoUnit.DAYS));  // 만료 시간 설정
+                builder.expiresAt(Instant.now().plus(30, ChronoUnit.MINUTES)); // access_token 30분
 
                 builder.claims((claims) -> {
                     claims.put("scope", client.getScopes());  // 클라이언트의 스코프 정보 추가
