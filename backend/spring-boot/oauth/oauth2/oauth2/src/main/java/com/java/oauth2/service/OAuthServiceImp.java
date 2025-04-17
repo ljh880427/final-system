@@ -327,21 +327,6 @@ public class OAuthServiceImp implements OAuthService {
 
   @Override
   public ResponseEntity<String> getCodeUrl(Map<String, String> body, HttpServletRequest request) {
-    // 로그인 상태 확인
-//    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//    if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
-//      //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용자가 로그인되어 있지 않습니다.");
-//      System.out.println("현재 사용자가 로그인되어 있지 않습니다.");
-//    }else {
-//      System.out.println("로그인된 상태입니다.");
-//    }
-//
-//    if (authentication instanceof AnonymousAuthenticationToken) {
-//      System.out.println("익명 사용자입니다.");
-//    } else {
-//      String username = authentication.getName(); // 또는 getPrincipal().toString()
-//      System.out.println("로그인된 사용자: " + username);
-//    }
 
     String clientId = body.get("email");
     String redirectUri = "https://l.0neteam.co.kr/callback/custom";
@@ -354,7 +339,7 @@ public class OAuthServiceImp implements OAuthService {
 
     System.out.println("getCodeUrl userNo : " + userNo);
 
-    String url = UriComponentsBuilder.fromHttpUrl(hostingUri + "/oauth2/authorize") // hostingUri로 바꿔도 됨
+    String url = UriComponentsBuilder.fromHttpUrl("/oauth2/authorize") // hostingUri로 바꿔도 됨
             .queryParam("response_type", "code")
             .queryParam("client_id", clientId)
             .queryParam("redirect_uri", redirectUri)

@@ -47,16 +47,16 @@ public class Utils {
                 if ("access_token".equals(cookie.getName())) {
                     List<JWK> jwks = jwkSet.getKeys();
                     String token = cookie.getValue();
-                    System.out.println("token = " + token);
+                    System.out.println("get UserNo token = " + token);
 
                     try{
 
                         // JwtDecoder를 사용하여 토큰 디코딩
                         Jwt jwt = jwtDecoder.decode(token);
                         // 🔹 디버깅 로그 출력 (토큰 클레임 및 만료 시간)
-                        System.out.println("Cafe Decoded JWT claims: " + jwt.getClaims());
+                        System.out.println("Decoded JWT claims: " + jwt.getClaims());
                         userNo = (String) jwt.getClaims().get("userNo");
-                        System.out.println("Cafe controller userNo : " + userNo);
+                        System.out.println("controller userNo : " + userNo);
 
 
                     } catch (JwtException e) {
