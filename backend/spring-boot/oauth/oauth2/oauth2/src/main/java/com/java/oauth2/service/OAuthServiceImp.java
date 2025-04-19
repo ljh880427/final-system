@@ -463,7 +463,7 @@ public class OAuthServiceImp implements OAuthService {
 
     try {
 
-      if(userNo.equals("invaildToken")) { // access_token 만료시에만 refresh 실행
+      if(userNo.equals("invaildToken") && social_userinfo == null) { // access_token 만료시에만 refresh 실행, 소셜로그인은 Pass
         System.out.println("invaildToken Refresh Start");
         Map<String, String> resultMap = getRefreshAccessToken(request, session);
         String access_token = resultMap.get("access_token");
