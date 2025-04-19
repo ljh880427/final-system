@@ -70,7 +70,7 @@ public class OAuthClientController {
   //@PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')") // 두 가지 권한 중 하나라도 있으면 허용 (OR)
   //@PreAuthorize("hasRole('ADMIN') and hasRole('SUPERUSER')") // 두 가지 권한을 모두 가지고 있어야 허용 (AND)
   //@PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('SCOPE_read')") // 세션 로그인과 JWT 인증을 모두 허용하고 싶을 때
-  @PreAuthorize("hasAuthority('SCOPE_read')")
+  //@PreAuthorize("hasAuthority('SCOPE_read')") // 소셜은 소셜쪽에서 관리
   @GetMapping("/MyPageInfo")
   public ResponseEntity<?> MyPageInfo(HttpServletRequest request, Model model) {
     return oAuthService.MyPageInfo(request,model);
