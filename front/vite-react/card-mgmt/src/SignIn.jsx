@@ -49,7 +49,7 @@ export default function SignIn() {
           const { data: redirectUrl } = await axios.post(`${API_BASE}/getCodeUrl`, { email }, { withCredentials: true });
           window.location.href = redirectUrl;
         } else {
-          alert('로그인 실패');
+          alert('계정을 확인해주세요.');
         }
       }
     } catch (error) {
