@@ -57,7 +57,7 @@ public class FileController {
 
 
 		log.info("USER : {}", userNo);
-		if("".equals(userNo)) userNo = "1";
+		if("".equals(userNo)) userNo = "0";
 		return fileService.uri(fileNo, Integer.parseInt(userNo));
 	}
 	

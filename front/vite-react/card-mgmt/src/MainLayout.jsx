@@ -92,55 +92,66 @@ const handleSubmit = async (e) => {
 };
 
 
-  // 데이터를 가져오는 함수
-  const fetchData = (keyword = '') => {
-    const apiUrl = keyword
-      ? `${API_BASE}?searchKeyWord=${encodeURIComponent(keyword)}`
-      : `${API_BASE}`;
+// 데이터를 가져오는 함수
+const fetchData = async (keyword = '') => {
+  const apiUrl = keyword
+    ? `${API_BASE}?searchKeyWord=${encodeURIComponent(keyword)}`
+    : `${API_BASE}`;
 
-    // 유저 로그인 정보가 있을경우에만 토큰 리플레시 실행
-  if (user.no) {
-    // access token refresh 요청
-    const refreshToken = async () => {
-      try {
-        const refresh_status = await axios.get(`${API_BASE}/RefreshToken`, { withCredentials: true });
-        if (refresh_status.data.status === true) {
-          console.log("token refresh complete");
-        } else {
-          console.log("token refresh fail!");
-        }
-      } catch (error) {
-        console.error("token refresh error:", error);
+  console.log("user no : " + user.no);
+
+  // access token refresh 요청
+  const refreshToken = async () => {
+    try {
+      const refresh_status = await axios.get(`${API_BASE}/RefreshToken`, { withCredentials: true });
+      if (refresh_status.data.status === true) {
+        console.log("token refresh complete");
+        return true;
+      } else {
+        console.log("token refresh fail!");
+        navigate('/signIn');
+        return false;
       }
-    };   
-    refreshToken(); // 토큰 리프레시 먼저 실행
-  }
-
-  axios.get(apiUrl, { withCredentials: true })
-    .then((res) => {
-      const data = res.data;
-
-      if (data.status === 'logout') {
-        navigate('/logout');
-        return;
-      }
-
-      setUser({
-        no: data.no || '',
-        name: data.name || '',
-        email: data.email || '',
-        PhotoNo: data.PhotoNo || ''
-      });
-
-      if (data.cardPictureUri) {
-        setCardImageBaseUri(data.cardPictureUri);
-      }
-
-      //if (data.PhotoNo) setProfileImage(data.PhotoNo);
-      if (data.cardInfos) setCards(data.cardInfos);
-    })
-    .catch((err) => console.error("데이터 로딩 실패:", err));
+    } catch (error) {
+      console.error("token refresh error:", error);
+      navigate('/signIn');
+      return false;
+    }
   };
+
+  // refreshToken을 먼저 실행하고 성공했을 때만 이후 요청 실행
+  const tokenRefreshed = await refreshToken();
+  if (!tokenRefreshed) return;
+
+  try {
+    const res = await axios.get(apiUrl, { withCredentials: true });
+    const data = res.data;
+
+    console.log(data);
+
+    if (data.status === 'logout') {
+      // navigate('/logout');
+      return;
+    }
+
+    setUser({
+      no: data.no || '',
+      name: data.name || '',
+      email: data.email || '',
+      PhotoNo: data.PhotoNo || ''
+    });
+
+    if (data.cardPictureUri) {
+      setCardImageBaseUri(data.cardPictureUri);
+    }
+
+    if (data.cardInfos) {
+      setCards(data.cardInfos);
+    }
+  } catch (err) {
+    console.error("데이터 로딩 실패:", err);
+  }
+};
 
   // 컴포넌트 마운트 시와 searchKeyword 변경 시 데이터 가져오기
   useEffect(() => {

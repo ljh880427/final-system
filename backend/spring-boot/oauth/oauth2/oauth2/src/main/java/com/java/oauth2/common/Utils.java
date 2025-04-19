@@ -77,6 +77,24 @@ public class Utils {
     }
 
 
+    public String getLoginEmail() {
+
+        String getLoginEmail = "";
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication instanceof AnonymousAuthenticationToken) {
+            getLoginEmail = "cat not find login email";
+            System.out.println("SecurityContextHolder 로그인 이메일 확인 불가 : " + getLoginEmail);
+        } else {
+            getLoginEmail = authentication.getName(); // 또는 getPrincipal().toString()
+            System.out.println("SecurityContextHolder 로그인된 사용자 확인 : " + getLoginEmail);
+        }
+
+        return getLoginEmail;
+    }
+
+
     public String getRefreshToken (HttpServletRequest request) {
 
         String refresh_token = "";

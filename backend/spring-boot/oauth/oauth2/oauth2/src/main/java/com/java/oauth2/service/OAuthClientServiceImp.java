@@ -64,8 +64,9 @@ public class OAuthClientServiceImp implements OAuthClientService {
   //        .scope("write")
 
             .tokenSettings(TokenSettings.builder()
-                    .accessTokenTimeToLive(Duration.ofMinutes(30))
-                    .refreshTokenTimeToLive(Duration.ofDays(7))
+                    .accessTokenTimeToLive(Duration.ofMinutes(1))
+                    //.refreshTokenTimeToLive(Duration.ofDays(7))
+                    .refreshTokenTimeToLive(Duration.ofMinutes(5))
                     .reuseRefreshTokens(true)
                     .build());
 

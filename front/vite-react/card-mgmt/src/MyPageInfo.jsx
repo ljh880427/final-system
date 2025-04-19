@@ -18,48 +18,55 @@ export default function MyPageInfo() {
 
   useEffect(() => {
 
-    // access token refresh 요청
-    const refreshToken = async () => {
+    const fetchUserInfo = async () => {
+      const API_BASE = import.meta.env.VITE_API_BASE;
+  
+      // 토큰 갱신
       try {
         const refresh_status = await axios.get(`${API_BASE}/RefreshToken`, { withCredentials: true });
+  
         if (refresh_status.data.status === true) {
           console.log("token refresh complete");
         } else {
           console.log("token refresh fail!");
+          navigate('/signIn');
+          return;
         }
       } catch (error) {
         console.error("token refresh error:", error);
+        navigate('/signIn'); // 실패 시 로그인 페이지 이동
+        return;
       }
-    };   
-    refreshToken(); // 토큰 리프레시 먼저 실행
-    
-    const API_BASE = import.meta.env.VITE_API_BASE;
-    axios.get(`${API_BASE}/MyPageInfo`, { withCredentials: true })
-      .then(res => {
-        if(res.data.status === true) {
-            console.log("내정보 로딩완료");
-            console.log(res);
-            setUserInfo({
-                email: res.data.email || '',
-                name: res.data.oAuthClient.name || '',
-                regDate: res.data.oAuthClient.parsRegDate || '',
-                loginType: res.data.oAuthClient.issuer || '',
-                photoUrl: res.data.PhotoNo || 'https://static.nid.naver.com/images/web/user/default.png?type=s160'
-              });
-
+  
+      // 토큰 갱신 성공 후, 사용자 정보 요청
+      try {
+        const res = await axios.get(`${API_BASE}/MyPageInfo`, { withCredentials: true });
+  
+        if (res.data.status === true) {
+          console.log("내정보 로딩완료");
+          console.log(res);
+          setUserInfo({
+            email: res.data.email || '',
+            name: res.data.oAuthClient.name || '',
+            regDate: res.data.oAuthClient.parsRegDate || '',
+            loginType: res.data.oAuthClient.issuer || '',
+            photoUrl: res.data.PhotoNo || 'https://static.nid.naver.com/images/web/user/default.png?type=s160'
+          });
         } else {
-            if(res.data.status === "logout"){
-                navigate("/logout");
-            }
-            console.log("내정보 로딩 오류");
-            alert("내정보 로딩 오류");
+          if (res.data.status === "logout") {
+            navigate("/logout");
+          }
+          console.log("내정보 로딩 오류");
+          alert("내정보 로딩 오류");
         }
-        
-      })
-      .catch(err => {
+      } catch (err) {
         console.error("사용자 정보 로딩 실패:", err);
         alert("사용자 정보를 불러오는 데 실패했습니다.");
-      });
+      }
+    };
+  
+    fetchUserInfo();
+    
   }, [id]);
 
   return (

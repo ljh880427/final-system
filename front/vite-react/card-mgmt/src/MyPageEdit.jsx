@@ -20,32 +20,34 @@ export default function MyPageEdit() {
   const API_BASE = import.meta.env.VITE_API_BASE;
 
   useEffect(() => {
-
-    // access token refresh 요청
-    const refreshToken = async () => {
+    const fetchUserInfo = async () => {
       try {
         const refresh_status = await axios.get(`${API_BASE}/RefreshToken`, { withCredentials: true });
+  
         if (refresh_status.data.status === true) {
           console.log("token refresh complete");
         } else {
           console.log("token refresh fail!");
+          navigate('/signIn');
+          return;
         }
       } catch (error) {
         console.error("token refresh error:", error);
+        navigate('/signIn');
+        return;
       }
-    };   
-    refreshToken(); // 토큰 리프레시 먼저 실행
-    
-    axios.get(`${API_BASE}/MyPageEdit`, { withCredentials: true })
-      .then((res) => {
+  
+      // 토큰 갱신 성공 후 사용자 정보 요청
+      try {
+        const res = await axios.get(`${API_BASE}/MyPageEdit`, { withCredentials: true });
         const data = res.data;
-
+  
         console.log(res);
         if (data.status === 'logout') {
           navigate('/logout');
           return;
         }
-
+  
         setForm((prev) => ({
           ...prev,
           no: data.oAuthClient?.no || '',
@@ -53,11 +55,13 @@ export default function MyPageEdit() {
           email: data.email || '',
           photo: data.PhotoNo || prev.photo
         }));
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error('사용자 정보 로딩 실패:', err);
         alert('사용자 정보 로딩 오류');
-      });
+      }
+    };
+  
+    fetchUserInfo();
   }, [navigate]);
 
   const handleChange = (e) => {

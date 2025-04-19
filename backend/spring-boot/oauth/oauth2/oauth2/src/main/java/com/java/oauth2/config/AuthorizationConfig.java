@@ -247,7 +247,7 @@ public class AuthorizationConfig {
 
                 builder.issuer("Oauth2_Server");  // 발급자 설정
                 //builder.expiresAt(Instant.now().plus(1, ChronoUnit.DAYS));  // 만료 시간 설정
-                builder.expiresAt(Instant.now().plus(30, ChronoUnit.MINUTES)); // access_token 30분
+                builder.expiresAt(Instant.now().plus(1, ChronoUnit.MINUTES)); // access_token 30분
 
                 builder.claims((claims) -> {
                     //claims.put("scope", client.getScopes()); // ❌ 클라이언트가 등록한 전체 scope

@@ -40,6 +40,8 @@ export default function CardEdit() {
           console.log("token refresh complete");
         } else {
           console.log("token refresh fail!");
+          navigate('/signIn'); // refresh 실패 or 미로그인 상태일시 로그아웃 및 로그인 화면 이동 처리
+          return;
         }
       } catch (error) {
         console.error("token refresh error:", error);

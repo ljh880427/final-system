@@ -68,6 +68,23 @@ public class OAuthServiceImp implements OAuthService {
 
   public ResponseEntity<?> getLoginInfo(@RequestParam(required = false) String searchKeyWord, HttpServletRequest request, Model model) {
 
+    /// ///////////////////////////////////////////////////////////////////////
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+      //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용자가 로그인되어 있지 않습니다.");
+      System.out.println("현재 사용자가 로그인되어 있지 않습니다.");
+    }else {
+      System.out.println("로그인된 상태입니다.");
+    }
+
+    if (authentication instanceof AnonymousAuthenticationToken) {
+      System.out.println("익명 사용자입니다.");
+    } else {
+      String username = authentication.getName(); // 또는 getPrincipal().toString()
+      System.out.println("로그인된 사용자: " + username);
+    }
+    /// /////////////////////////////////////////////////////////////////////////
+
     Map<String, Object> result = new HashMap<>();
 
     List<CardInfo> cardInfos = null;
@@ -76,7 +93,9 @@ public class OAuthServiceImp implements OAuthService {
 
     String userNo = utils.getUserNo(request);
 
-    if(userNo != null && !userNo.trim().isEmpty()) {
+    System.out.println("userNo 확인 : " + userNo);
+
+    if(userNo != null && !userNo.trim().isEmpty() && !userNo.equals("invaildToken")) {
       int UserNo = Integer.parseInt(userNo);
       OAuthClient oAuthClient = oAuthClientRepository.findByNoAndUseYN(UserNo, 'Y');
 
@@ -115,9 +134,6 @@ public class OAuthServiceImp implements OAuthService {
     // 소셜로그인 값이 있는경우
     if (social_userinfo != null) {
 
-      //model.addAttribute("issuer", social_userinfo.getIssuer());
-      //model.addAttribute("name", social_userinfo.getName());
-      //model.addAttribute("email", social_userinfo.getEmail());
       result.put("no", social_userinfo.getId());
       result.put("issuer", social_userinfo.getIssuer());
       result.put("name", social_userinfo.getName());
@@ -132,20 +148,8 @@ public class OAuthServiceImp implements OAuthService {
       //return "main";
     }
 
-    // 토큰 인증 실패시 로그아웃 처리
-    if(userNo.equals("invaildToken")) {
-      System.out.println("invaildToken");
-      //return "redirect:" + hostingUri + "/oauth2/logout";
-      result.put("hosturl", hostingUri);
-      result.put("status", "logout");
-    }
-
-    System.out.println("userNo : " + userNo);
-
     if(cardInfos != null){
       System.out.println("cardInfos : " + cardInfos);
-      //model.addAttribute("cardInfos", cardInfos);
-      //model.addAttribute("cardPictureUri", hostingUri + "/file/uri/"); // 명함 프로필+명함사진
       result.put("cardInfos", cardInfos);
     }
 
@@ -440,34 +444,53 @@ public class OAuthServiceImp implements OAuthService {
     Map<String, Object> result = new HashMap<>();
 
     boolean status = false;
+
+    String userNo = utils.getUserNo(request);
+
+    System.out.println("Refresh userNo Check : " + userNo);
+
+    if(userNo.equals("")){
+      System.out.println("로그인 화면으로 이동 처리");
+      result.put("status", status);
+      return ResponseEntity.ok(result);
+    }
+
     try {
-      Map<String, String> resultMap = getRefreshAccessToken(request, session);
-      String access_token = resultMap.get("access_token");
-      String refresh_token = resultMap.get("refresh_token");
 
-      System.out.println("new access_token = " + access_token);
-      System.out.println("new refresh_token = " + refresh_token);
+      if(userNo.equals("invaildToken")) { // access_token 만료시에만 refresh 실행
+        System.out.println("invaildToken Refresh Start");
+        Map<String, String> resultMap = getRefreshAccessToken(request, session);
+        String access_token = resultMap.get("access_token");
+        String refresh_token = resultMap.get("refresh_token");
 
-      // 사용자 권한 업데이트 (필요시 룰 수정)
-      utils.Update_login_Authentication(request, access_token);
+        System.out.println("resultMap : " + resultMap);
+        System.out.println("new access_token = " + access_token);
+        System.out.println("new refresh_token = " + refresh_token);
 
-      Cookie cookie_access_token = new Cookie("access_token", access_token);
+        // 사용자 권한 업데이트 (필요시 룰 수정)
+        utils.Update_login_Authentication(request, access_token);
 
-      cookie_access_token.setHttpOnly(true); // JavaScript에서 접근 불가
-      //cookie.setSecure(true); // HTTPS에서만 전송
-      cookie_access_token.setPath("/"); //
-      cookie_access_token.setMaxAge(session.getMaxInactiveInterval());
-      response.addCookie(cookie_access_token);
+        Cookie cookie_access_token = new Cookie("access_token", access_token);
 
-      Cookie cookie_refresh_token = new Cookie("refresh_token", refresh_token);
+        cookie_access_token.setHttpOnly(true); // JavaScript에서 접근 불가
+        //cookie.setSecure(true); // HTTPS에서만 전송
+        cookie_access_token.setPath("/"); //
+        cookie_access_token.setMaxAge(session.getMaxInactiveInterval());
+        response.addCookie(cookie_access_token);
 
-      cookie_refresh_token.setHttpOnly(true); // JavaScript에서 접근 불가
-      //cookie.setSecure(true); // HTTPS에서만 전송
-      cookie_refresh_token.setPath("/"); //
-      cookie_refresh_token.setMaxAge(session.getMaxInactiveInterval());
-      response.addCookie(cookie_refresh_token);
+        Cookie cookie_refresh_token = new Cookie("refresh_token", refresh_token);
 
-      status = true;
+        cookie_refresh_token.setHttpOnly(true); // JavaScript에서 접근 불가
+        //cookie.setSecure(true); // HTTPS에서만 전송
+        cookie_refresh_token.setPath("/"); //
+        cookie_refresh_token.setMaxAge(session.getMaxInactiveInterval());
+        response.addCookie(cookie_refresh_token);
+
+        status = true;
+
+      }else { // 토큰 만료 상태가 아닌경우 refresh Pass
+        status = true;
+      }
 
     } catch (Exception e) {
       status = false;
@@ -487,19 +510,16 @@ public class OAuthServiceImp implements OAuthService {
 
     MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
 
-    String userNo = utils.getUserNo(request);
+    String client_id = utils.getLoginEmail();
 
-    if(userNo != null) {
-      OAuthClient oAuthClient = oAuthClientRepository.findById(Integer.parseInt(userNo)).orElseThrow();
+    String client_secret = (String) session.getAttribute("client_secret_" + client_id);
 
-      String client_secret = (String) session.getAttribute("client_secret_" + oAuthClient.getEmail());
-      String refresh_token = utils.getRefreshToken(request);
+    String refresh_token = utils.getRefreshToken(request);
 
-      formData.add("grant_type", "refresh_token");
-      formData.add("refresh_token", refresh_token);
-      formData.add("client_id", oAuthClient.getEmail());
-      formData.add("client_secret", client_secret); // 실제 secret 사용
-    }
+    formData.add("grant_type", "refresh_token");
+    formData.add("refresh_token", refresh_token);
+    formData.add("client_id", client_id);
+    formData.add("client_secret", client_secret); // 실제 secret 사용
 
     return RestClient.create().post()
             .uri(hostingUri + "/oauth2/token")
@@ -549,9 +569,9 @@ public class OAuthServiceImp implements OAuthService {
     response.addHeader(HttpHeaders.SET_COOKIE, jsessionIdCookie.toString());
 
 
-    //소셜 로그인 세션 삭제
+    //사용자 로그인 세션정보 삭제
     if (session != null) {
-      session.removeAttribute("SPRING_SECURITY_CONTEXT");
+      session.removeAttribute("SPRING_SECURITY_CONTEXT");  // SecurityContext context = SecurityContextHolder.getContext();
     }
 
 //    model.addAttribute("cafeList", postRepository.findTop10ByMenuNoBoardNoType(1, Sort.by(Sort.Order.desc("no"))));
