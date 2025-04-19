@@ -445,11 +445,17 @@ public class OAuthServiceImp implements OAuthService {
 
     boolean status = false;
 
+    // access_token 에서 가져오는 사용자 userNo
     String userNo = utils.getUserNo(request);
 
-    System.out.println("Refresh userNo Check : " + userNo);
+    // 소셜 로그인에서 가져오는 사용자 정보
+    CustomOAuth2User social_userinfo = null;
+    social_userinfo = UserUtils.getCustomOAuth2User(request);
 
-    if(userNo.equals("")){
+    System.out.println("Refresh userNo Check : " + userNo);
+    log.info("social_userinfo : {}", social_userinfo);
+
+    if(social_userinfo == null && userNo.equals("")){
       System.out.println("로그인 화면으로 이동 처리");
       result.put("status", status);
       return ResponseEntity.ok(result);
