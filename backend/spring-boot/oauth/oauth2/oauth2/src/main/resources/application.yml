@@ -57,7 +57,7 @@ spring:
           google:
             client-id: 625733066420-sng7p39el6vruh7lmansi2pq8e61th5q.apps.googleusercontent.com
             client-secret: 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
-            redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
+            redirect-uri: "https://l.0neteam.co.kr/oauth2/callback/google"
             authorization-grant-type: authorization_code
             client-authentication-method: client_secret_post
             scope: profile, email
