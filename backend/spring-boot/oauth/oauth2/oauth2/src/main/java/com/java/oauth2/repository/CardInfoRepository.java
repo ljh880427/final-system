@@ -22,6 +22,12 @@ public interface CardInfoRepository extends JpaRepository<CardInfo, Integer> {
     List<CardInfo> findTop100ByRegUserNoAndUseYNOrderByNoDesc(int userNo, char userYN);
 
     // 기본적인 LIKE 검색 (Containing = "%값%")
-    List<CardInfo> findTop100ByUseYNAndNameContainingOrCompanyContainingOrPositionContainingOrderByNoDesc(char useYN, String name, String company, String position);
+    List<CardInfo> findTop100ByUseYNAndRegUserNoAndNameContainingOrCompanyContainingOrPositionContainingOrderByNoDesc(
+            char useYN,
+            int userNo,
+            String keyword1,
+            String keyword2,
+            String keyword3
+    );
 
 }

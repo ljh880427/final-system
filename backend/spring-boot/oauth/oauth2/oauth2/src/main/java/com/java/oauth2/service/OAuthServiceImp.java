@@ -102,7 +102,7 @@ public class OAuthServiceImp implements OAuthService {
       // payload에서 cardNo 값을 추출 (숫자 형태로 변환)
       if(searchKeyWord != null && !searchKeyWord.isEmpty()){
         System.out.println("searchKeyWord : " + searchKeyWord);
-        cardInfos = cardInfoRepository.findTop100ByUseYNAndNameContainingOrCompanyContainingOrPositionContainingOrderByNoDesc('Y', searchKeyWord, searchKeyWord, searchKeyWord);
+        cardInfos = cardInfoRepository.findTop100ByUseYNAndRegUserNoAndNameContainingOrCompanyContainingOrPositionContainingOrderByNoDesc('Y', UserNo, searchKeyWord, searchKeyWord, searchKeyWord);
       } else {
         cardInfos = cardInfoRepository.findTop100ByRegUserNoAndUseYNOrderByNoDesc(UserNo, 'Y');
       }
@@ -142,6 +142,14 @@ public class OAuthServiceImp implements OAuthService {
       OAuthClient social_oAuthClient = oAuthClientRepository.findByNoAndUseYN(social_userinfo.getId(), 'Y');
       if (social_oAuthClient.getFileNo() > 0) {
         result.put("PhotoNo", "/file/uri/" + social_oAuthClient.getFileNo());
+      }
+
+      // payload에서 cardNo 값을 추출 (숫자 형태로 변환)
+      if(searchKeyWord != null && !searchKeyWord.isEmpty()){
+        System.out.println("searchKeyWord : " + searchKeyWord);
+        cardInfos = cardInfoRepository.findTop100ByUseYNAndRegUserNoAndNameContainingOrCompanyContainingOrPositionContainingOrderByNoDesc('Y', social_userinfo.getId(), searchKeyWord, searchKeyWord, searchKeyWord);
+      } else {
+        cardInfos = cardInfoRepository.findTop100ByRegUserNoAndUseYNOrderByNoDesc(social_userinfo.getId(), 'Y');
       }
 
       log.info("social result : {}", result);
