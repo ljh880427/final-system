@@ -26,7 +26,7 @@ public class OAuth2UserServiceImp extends DefaultOAuth2UserService {
     // 기본적인 사용자 정보 로딩
     OAuth2User oAuth2User = super.loadUser(request);
 
-    // 클라이언트 이름(예: 네이버, 카카오) 가져오기
+    // 클라이언트 이름(예: 네이버, 카카오, 구글) 가져오기
     String oAuthClientName = request.getClientRegistration().getClientName();
 
     try {
@@ -72,6 +72,19 @@ public class OAuth2UserServiceImp extends DefaultOAuth2UserService {
           name = profile.get("nickname").toString();
         }
       }
+    }
+
+    // 구글 OAuth2 응답 처리
+    if(oAuthClientName.equals("Google")) {
+      // 구글에서 반환한 데이터에서 속성
+
+      oauthId = oAuth2User.getAttributes().get("sub").toString();
+      email = oAuth2User.getAttributes().get("email").toString();
+      name = oAuth2User.getAttributes().get("name").toString();
+
+      System.out.println("google oauthId : " + oauthId);
+      System.out.println("google email : " + email);
+      System.out.println("google name : " + name);
     }
 
     // 기존 회원인지 확인 후, 신규 회원이면 DB에 추가
