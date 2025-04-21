@@ -1,7 +1,10 @@
 package com.java.oauth2.service;
 
 import java.util.Objects;
+
+import com.java.oauth2.common.UserUtils;
 import com.java.oauth2.common.Utils;
+import com.java.oauth2.dto.CustomOAuth2User;
 import com.java.oauth2.dto.FileDTO;
 import com.java.oauth2.dto.FileResDTO;
 import com.java.oauth2.entity.CardInfo;
@@ -9,6 +12,7 @@ import com.java.oauth2.entity.OAuthClient;
 import com.java.oauth2.repository.CardInfoRepository;
 import com.java.oauth2.repository.OAuthClientRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -68,10 +72,22 @@ public class CardServiceImp implements CardService {
     @Override
     public boolean PictureRegCardInfo(MultipartFile userPictureFile, MultipartFile cardPictureFile, String name, String tel, HttpServletRequest request) {
 
+        String userNo = "";
+
+        HttpSession session = request.getSession();
+        CustomOAuth2User social_userinfo = null;
+        social_userinfo = UserUtils.getCustomOAuth2User(request);
+        log.info("social_userinfo : {}", social_userinfo);
+
         //name 과 tel 값이 없으면 패스
         if(name != null && !name.isEmpty() && tel != null && !tel.isEmpty()) {
 
-            String userNo = utils.getUserNo(request);
+            // 소셜로그인 값이 있는경우
+            if (social_userinfo != null) {
+                userNo = String.valueOf(social_userinfo.getId());
+            }else {
+                userNo = utils.getUserNo(request);
+            }
 
             int fileUserNo = 0;
             int filePictureNo = 0;

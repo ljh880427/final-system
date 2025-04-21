@@ -28,7 +28,7 @@ public class FileInfo {
 	@Column(nullable = false, length = 100)
 	private String name;
 	
-	@Column(nullable = false, length = 50)
+	@Column(nullable = false, length = 255)
 	private String attachPath;
 	
 	@Column(nullable = false, length = 10)
