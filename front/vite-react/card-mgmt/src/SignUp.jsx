@@ -41,19 +41,11 @@ export default function SignUp() {
             <br /><br />
 
             <p>
-              <a className="social-btn" href="/oauth2/login/facebook" style={{ padding: '1px 6px' }}>
-                <img src={facebook} alt="Facebook" style={{ width: '55px', height: '50px' }} />
+              <a className="social-btn" href="/oauth2/login/google" style={{ padding: '1px 6px' }}>
+                <img src={google} alt="Google" style={{ width: '61px' }} />
               </a>
               <a className="social-btn" href="/oauth2/login/naver" style={{ padding: '1px 6px' }}>
-                <img src={naver} alt="Naver" style={{ width: '55px', height: '50px' }} />
-              </a>
-            </p>
-            <p>
-              <a className="social-btn" href="/oauth2/login/kakao" style={{ padding: '1px 6px' }}>
-                <img src={kakao} alt="KaKao" style={{ width: '55px', height: '50px' }} />
-              </a>
-              <a className="social-btn" href="/oauth2/login/google" style={{ padding: '1px 6px' }}>
-                <img src={google} alt="Google" style={{ width: '55px', height: '50px' }} />
+                <img src={naver} alt="Naver" style={{ width: '55px' }} />
               </a>
             </p>
 
