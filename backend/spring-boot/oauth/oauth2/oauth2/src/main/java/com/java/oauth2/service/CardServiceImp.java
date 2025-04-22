@@ -159,10 +159,22 @@ public class CardServiceImp implements CardService {
                                             @RequestParam("memo") String memo,
                                             HttpServletRequest request) {
 
+        String userNo = "";
+
+        HttpSession session = request.getSession();
+        CustomOAuth2User social_userinfo = null;
+        social_userinfo = UserUtils.getCustomOAuth2User(request);
+        log.info("social_userinfo : {}", social_userinfo);
+
         //name 과 tel 값이 없으면  not null
         if(name != null && !name.isEmpty() && tel != null && !tel.isEmpty()) {
 
-            String userNo = utils.getUserNo(request);
+            // 소셜로그인 값이 있는경우
+            if (social_userinfo != null) {
+                userNo = String.valueOf(social_userinfo.getId());
+            }else {
+                userNo = utils.getUserNo(request);
+            }
 
             int fileUserNo = 0;
             int filePictureNo = 0;
