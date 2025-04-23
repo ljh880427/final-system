@@ -148,6 +148,7 @@ public class CardServiceImp implements CardService {
     @Override
     public boolean EditDetailUpdateCardInfo(@RequestParam(value = "userPictureFile", required = false) MultipartFile userPictureFile,
                                             @RequestParam(value = "cardPictrueFile", required = false) MultipartFile cardPictrueFile,
+                                            @RequestParam(value = "initFilePicture", required = false, defaultValue = "0") String initFilePicture,
                                             @RequestParam("cardNo") String cardNo,
                                             @RequestParam("company") String company,
                                             @RequestParam("position") String position,
@@ -276,6 +277,12 @@ public class CardServiceImp implements CardService {
                 }
                 if (!Objects.equals(cardInfo.getMemo(), memo)) {
                     cardInfo.setMemo(memo);
+                    updateYN = true;
+                }
+
+                // initFilePicture 값이 "1"일 경우, 기존 카드 이미지 초기화 로직
+                if (initFilePicture.equals("1")) {
+                    cardInfo.setFilePictureNo(0);
                     updateYN = true;
                 }
 

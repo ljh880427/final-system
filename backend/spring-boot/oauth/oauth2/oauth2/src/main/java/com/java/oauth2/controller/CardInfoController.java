@@ -114,20 +114,21 @@ public class CardInfoController {
     @PostMapping("/EditDetailUpdateCardInfo")
     public ResponseEntity<Map<String, Object>> EditDetailUpdateCardInfo (@RequestParam(value = "userPictureFile", required = false) MultipartFile userPictureFile,
                                                                          @RequestParam(value = "cardPictureFile", required = false) MultipartFile cardPictureFile,
-                                                                   @RequestParam("cardNo") String cardNo,
-                                                                   @RequestParam("company") String company,
-                                                                   @RequestParam("position") String position,
-                                                                   @RequestParam("name") String name,
-                                                                   @RequestParam("adr") String adr,
-                                                                   @RequestParam("email") String email,
-                                                                   @RequestParam("tel") String tel,
-                                                                   @RequestParam("fax") String fax,
-                                                                   @RequestParam("memo") String memo,
-                                                                   HttpServletRequest request) {
+                                                                         @RequestParam(value = "initFilePicture", required = false, defaultValue = "0") String initFilePicture,
+                                                                         @RequestParam("cardNo") String cardNo,
+                                                                         @RequestParam("company") String company,
+                                                                         @RequestParam("position") String position,
+                                                                         @RequestParam("name") String name,
+                                                                         @RequestParam("adr") String adr,
+                                                                         @RequestParam("email") String email,
+                                                                         @RequestParam("tel") String tel,
+                                                                         @RequestParam("fax") String fax,
+                                                                         @RequestParam("memo") String memo,
+                                                                         HttpServletRequest request) {
 
         Map<String, Object> response = new HashMap<>();
 
-        boolean status = cardService.EditDetailUpdateCardInfo(userPictureFile, cardPictureFile, cardNo, company, position, name, adr, email, tel, fax, memo, request);
+        boolean status = cardService.EditDetailUpdateCardInfo(userPictureFile, cardPictureFile, initFilePicture, cardNo, company, position, name, adr, email, tel, fax, memo, request);
 
         if (status) {
             // 성공 응답

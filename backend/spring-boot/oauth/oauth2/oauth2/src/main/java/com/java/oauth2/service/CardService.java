@@ -22,6 +22,7 @@ public interface CardService {
 
     public boolean EditDetailUpdateCardInfo (@RequestParam(value = "userPictureFile", required = false) MultipartFile userPictureFile,
                                              @RequestParam(value = "cardPictureFile", required = false) MultipartFile cardPictureFile,
+                                             @RequestParam(value = "initFilePicture", required = false, defaultValue = "0") String initFilePicture,
                                                                          @RequestParam("cardNo") String cardNo,
                                                                          @RequestParam("company") String company,
                                                                          @RequestParam("position") String position,
