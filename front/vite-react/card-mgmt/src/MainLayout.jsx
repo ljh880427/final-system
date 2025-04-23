@@ -412,7 +412,7 @@ const fetchData = async (keyword = '') => {
                           <input type="file" id="file-input-profile" accept="image/*" onChange={handleProfileChange} style={{ display: 'none' }} />
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '200px' }}>
-                          <label>명함 사진 등록</label>
+                          <label><span style={{ color: 'red' }}>*</span> 명함 사진 등록</label>
                           <img src={cardImage} alt="Card" className="cardreg-img" style={{ cursor: 'pointer', width: '150px' }} onClick={() => fileInputRef.current.click()} />
                           <input type="file" id="file-input-card" ref={fileInputRef} accept="image/*" onChange={handleCardChange} style={{ display: 'none' }} />
                         </div>
