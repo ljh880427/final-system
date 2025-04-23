@@ -251,7 +251,7 @@ const fetchData = async (keyword = '') => {
               <div className="tabs">
                 {['cardlist', 'writereg', 'picturereg'].map((tab) => (
                   <div key={tab} className={`tab ${activeTab === tab ? 'active' : ''}`} onClick={() => setActiveTab(tab)}>
-                    {tab === 'cardlist' ? '명함목록' : tab === 'writereg' ? '명함등록' : '사진등록'}
+                    {tab === 'cardlist' ? '명함목록' : tab === 'writereg' ? '명함입력' : '사진등록'}
                   </div>
                 ))}
               </div>
