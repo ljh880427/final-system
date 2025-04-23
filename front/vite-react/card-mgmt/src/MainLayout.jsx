@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Layout from './layout/Layout';
 import './css/main.css';
 import defaultProfile from './img/default.png';
@@ -62,10 +62,17 @@ const handleDelete = async (cardNo, event) => {
   }
 };
 
+const fileInputRef = useRef();
 
 // 사진으로 등록시 
 const handleSubmit = async (e) => {
   e.preventDefault();
+
+  if (!fileInputRef.current.files.length) {
+    alert('명함 사진을 등록해주세요.');
+    return;
+  }
+
   const data = new FormData();
   if (profileFile) data.append('userPictureFile', profileFile);
   if (cardFile) data.append('cardPictureFile', cardFile);
@@ -97,8 +104,6 @@ const fetchData = async (keyword = '') => {
   const apiUrl = keyword
     ? `${API_BASE}?searchKeyWord=${encodeURIComponent(keyword)}`
     : `${API_BASE}`;
-
-  console.log("user no : " + user.no);
 
   // access token refresh 요청
   const refreshToken = async () => {
@@ -408,8 +413,8 @@ const fetchData = async (keyword = '') => {
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '200px' }}>
                           <label>명함 사진 등록</label>
-                          <img src={cardImage} alt="Card" className="cardreg-img" style={{ cursor: 'pointer', width: '150px' }} onClick={() => document.getElementById('file-input-card').click()} />
-                          <input type="file" id="file-input-card" accept="image/*" onChange={handleCardChange} style={{ display: 'none' }} />
+                          <img src={cardImage} alt="Card" className="cardreg-img" style={{ cursor: 'pointer', width: '150px' }} onClick={() => fileInputRef.current.click()} />
+                          <input type="file" id="file-input-card" ref={fileInputRef} accept="image/*" onChange={handleCardChange} style={{ display: 'none' }} />
                         </div>
                       </div>
                       <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '20px' }}>
