@@ -125,8 +125,8 @@ const fetchData = async (keyword = '') => {
   // };
 
   // refreshToken을 먼저 실행하고 성공했을 때만 이후 요청 실행
-  const tokenRefreshed = await refreshToken();
-  if (!tokenRefreshed) return;
+  // const tokenRefreshed = await refreshToken();
+  // if (!tokenRefreshed) return;
 
   try {
     const res = await axios.get(apiUrl, { withCredentials: true });
