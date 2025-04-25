@@ -1,15 +1,16 @@
 // App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import MainLayout from './MainLayout'; // 기존 App 내용을 이 파일로 이동
-import SignIn from './SignIn';         // 로그인 페이지
-import SignUp from './SignUp';         // 회원가입 페이지
+import MainLayout from './MainLayout';
+import SignIn from './SignIn';
+import SignUp from './SignUp';
 import Logout from './Logout';
-import CardDetail from './CardDetail';  // 카드 디테일 정보(상세)
-import CardEdit from './CardEdit'; // 카드 수정 컴포넌트 추가
-import MyPageInfo from './MyPageInfo'; // 카드 수정 컴포넌트 추가
-import MyPageEdit from './MyPageEdit'; // 카드 수정 컴포넌트 추가
-import OAuthCallback from './OAuthCallback'; // 로그인 code callback 컴포넌트 추가
+import CardDetail from './CardDetail';
+import CardEdit from './CardEdit';
+import MyPageInfo from './MyPageInfo';
+import MyPageEdit from './MyPageEdit';
+import OAuthCallback from './OAuthCallback';
+import PrivateRoute from './PrivateRoute'; // 새로 추가
 
 export default function App() {
   return (
@@ -19,11 +20,13 @@ export default function App() {
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/logout" element={<Logout />} />
-        <Route path="/detail/:id" element={<CardDetail />} />
-        <Route path="/edit/:cardNo" element={<CardEdit />} /> 
-        <Route path="/MyPageInfo/:id" element={<MyPageInfo />} /> 
-        <Route path="/MyPageEdit/:id" element={<MyPageEdit />} /> 
         <Route path="/callback/custom" element={<OAuthCallback />} />
+        
+        {/* 보호된 라우트 */}
+        <Route path="/detail/:id" element={<PrivateRoute><CardDetail /></PrivateRoute>} />
+        <Route path="/edit/:cardNo" element={<PrivateRoute><CardEdit /></PrivateRoute>} />
+        <Route path="/MyPageInfo/:id" element={<PrivateRoute><MyPageInfo /></PrivateRoute>} />
+        <Route path="/MyPageEdit/:id" element={<PrivateRoute><MyPageEdit /></PrivateRoute>} />
       </Routes>
     </Router>
   );

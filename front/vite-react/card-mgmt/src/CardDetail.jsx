@@ -25,14 +25,14 @@ export default function CardDetail() {
     const fetchData = async () => {
       try {
 
-        const refresh_status = await axios.get(`${API_BASE}/RefreshToken`, { withCredentials: true });
-        if (refresh_status.data.status === true) {
-          console.log("token refresh complete");
-        } else {
-          console.log("token refresh fail!");
-          navigate('/signIn'); // refresh 실패 or 미로그인 상태일시 로그아웃 및 로그인 화면 이동 처리
-          return;
-        }
+        // const refresh_status = await axios.get(`${API_BASE}/RefreshToken`, { withCredentials: true });
+        // if (refresh_status.data.status === true) {
+        //   console.log("token refresh complete");
+        // } else {
+        //   console.log("token refresh fail!");
+        //   navigate('/signIn'); // refresh 실패 or 미로그인 상태일시 로그아웃 및 로그인 화면 이동 처리
+        //   return;
+        // }
   
         const res = await axios.get(`${API_BASE}/card/detail?cardNo=${id}`, {
           withCredentials: true

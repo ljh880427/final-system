@@ -105,24 +105,24 @@ const fetchData = async (keyword = '') => {
     ? `${API_BASE}?searchKeyWord=${encodeURIComponent(keyword)}`
     : `${API_BASE}`;
 
-  // access token refresh 요청
-  const refreshToken = async () => {
-    try {
-      const refresh_status = await axios.get(`${API_BASE}/RefreshToken`, { withCredentials: true });
-      if (refresh_status.data.status === true) {
-        console.log("token refresh complete");
-        return true;
-      } else {
-        console.log("token refresh fail!");
-        navigate('/signIn');
-        return false;
-      }
-    } catch (error) {
-      console.error("token refresh error:", error);
-      navigate('/signIn');
-      return false;
-    }
-  };
+  // // access token refresh 요청
+  // const refreshToken = async () => {
+  //   try {
+  //     const refresh_status = await axios.get(`${API_BASE}/RefreshToken`, { withCredentials: true });
+  //     if (refresh_status.data.status === true) {
+  //       console.log("token refresh complete");
+  //       return true;
+  //     } else {
+  //       console.log("token refresh fail!");
+  //       navigate('/signIn');
+  //       return false;
+  //     }
+  //   } catch (error) {
+  //     console.error("token refresh error:", error);
+  //     navigate('/signIn');
+  //     return false;
+  //   }
+  // };
 
   // refreshToken을 먼저 실행하고 성공했을 때만 이후 요청 실행
   const tokenRefreshed = await refreshToken();

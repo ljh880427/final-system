@@ -21,21 +21,21 @@ export default function MyPageEdit() {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      try {
-        const refresh_status = await axios.get(`${API_BASE}/RefreshToken`, { withCredentials: true });
+      //try {
+      //   const refresh_status = await axios.get(`${API_BASE}/RefreshToken`, { withCredentials: true });
   
-        if (refresh_status.data.status === true) {
-          console.log("token refresh complete");
-        } else {
-          console.log("token refresh fail!");
-          navigate('/signIn');
-          return;
-        }
-      } catch (error) {
-        console.error("token refresh error:", error);
-        navigate('/signIn');
-        return;
-      }
+      //   if (refresh_status.data.status === true) {
+      //     console.log("token refresh complete");
+      //   } else {
+      //     console.log("token refresh fail!");
+      //     navigate('/signIn');
+      //     return;
+      //   }
+      // } catch (error) {
+      //   console.error("token refresh error:", error);
+      //   navigate('/signIn');
+      //   return;
+      // }
   
       // 토큰 갱신 성공 후 사용자 정보 요청
       try {

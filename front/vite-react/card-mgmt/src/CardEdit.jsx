@@ -32,21 +32,21 @@ export default function CardEdit() {
   const cardInputRef = useRef(null);
 
   useEffect(() => {
-    const refreshToken = async () => {
-      try {
-        const refresh_status = await axios.get(`${API_BASE}/RefreshToken`, { withCredentials: true });
-        if (refresh_status.data.status === true) {
-          console.log("token refresh complete");
-        } else {
-          console.log("token refresh fail!");
-          navigate('/signIn');
-          return;
-        }
-      } catch (error) {
-        console.error("token refresh error:", error);
-      }
-    };
-    refreshToken();
+    // const refreshToken = async () => {
+    //   try {
+    //     const refresh_status = await axios.get(`${API_BASE}/RefreshToken`, { withCredentials: true });
+    //     if (refresh_status.data.status === true) {
+    //       console.log("token refresh complete");
+    //     } else {
+    //       console.log("token refresh fail!");
+    //       navigate('/signIn');
+    //       return;
+    //     }
+    //   } catch (error) {
+    //     console.error("token refresh error:", error);
+    //   }
+    // };
+    // refreshToken();
 
     axios.get(`${API_BASE}/card/edit?cardNo=${cardNo}`, { withCredentials: true })
       .then((res) => {
