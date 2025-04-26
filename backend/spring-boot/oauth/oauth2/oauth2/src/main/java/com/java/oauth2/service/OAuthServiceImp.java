@@ -650,6 +650,27 @@ public class OAuthServiceImp implements OAuthService {
   }
 
 
+  public ResponseEntity<?> deleteAccount(@RequestBody Map<String, Object> payload) {
+
+    try {
+      // React에서 넘긴 userNo 꺼내기
+      int userNo = Integer.parseInt(payload.get("userNo").toString());
+
+      System.out.println("받은 userNo: " + userNo);
+
+      OAuthClient oAuthClient = oAuthClientRepository.findById(userNo).orElseThrow();
+
+      oAuthClient.setUseYN('N'); //사용자 사용 N 처리
+
+      oAuthClientRepository.save(oAuthClient);
+
+      return ResponseEntity.ok(Map.of("status", true));
+    } catch (Exception e) {
+      e.printStackTrace();
+      return ResponseEntity.ok(Map.of("status", false));
+    }
+  }
+
   public ResponseEntity<?> MyPageInfo(HttpServletRequest request, Model model) {
 
     Map<String, Object> result = new HashMap<>();

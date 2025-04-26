@@ -27,6 +27,8 @@ public interface OAuthService {
 
     public ResponseEntity<?> logout(Model model, HttpServletResponse response, HttpSession session);
 
+    public ResponseEntity<?> deleteAccount(@RequestBody Map<String, Object> payload);
+
     public ResponseEntity<?> MyPageInfo(HttpServletRequest request, Model model);
     public ResponseEntity<?> MyPageEdit(HttpServletRequest request, Model model);
 

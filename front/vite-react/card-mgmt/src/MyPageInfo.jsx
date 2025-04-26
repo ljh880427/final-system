@@ -9,6 +9,7 @@ export default function MyPageInfo() {
   const { id } = useParams();
 
   const [userInfo, setUserInfo] = useState({
+    userNo: '', 
     email: '',
     name: '',
     regDate: '',
@@ -21,23 +22,7 @@ export default function MyPageInfo() {
     const fetchUserInfo = async () => {
       const API_BASE = import.meta.env.VITE_API_BASE;
   
-      // // 토큰 갱신
-      // try {
-      //   const refresh_status = await axios.get(`${API_BASE}/RefreshToken`, { withCredentials: true });
-  
-      //   if (refresh_status.data.status === true) {
-      //     console.log("token refresh complete");
-      //   } else {
-      //     console.log("token refresh fail!");
-      //     navigate('/signIn');
-      //     return;
-      //   }
-      // } catch (error) {
-      //   console.error("token refresh error:", error);
-      //   navigate('/signIn'); // 실패 시 로그인 페이지 이동
-      //   return;
-      // }
-  
+ 
       // 토큰 갱신 성공 후, 사용자 정보 요청
       try {
         const res = await axios.get(`${API_BASE}/MyPageInfo`, { withCredentials: true });
@@ -46,6 +31,7 @@ export default function MyPageInfo() {
           console.log("내정보 로딩완료");
           console.log(res);
           setUserInfo({
+            userNo: res.data.oAuthClient.no || '', 
             email: res.data.email || '',
             name: res.data.oAuthClient.name || '',
             regDate: res.data.oAuthClient.parsRegDate || '',
@@ -69,6 +55,29 @@ export default function MyPageInfo() {
     
   }, [id]);
 
+
+  const handleDeleteAccount = async () => {
+    const API_BASE = import.meta.env.VITE_API_BASE;
+    if (!window.confirm('정말 탈퇴하시겠습니까?')) {
+      return;
+    }
+    try {
+      const res = await axios.post(`${API_BASE}/DeleteAccount`, {
+        userNo: userInfo.userNo
+      }, { withCredentials: true });
+      
+      if (res.data.status === true) {
+        alert('회원 탈퇴가 완료되었습니다.');
+        navigate('/logout');
+      } else {
+        alert('회원 탈퇴에 실패했습니다.');
+      }
+    } catch (err) {
+      console.error('회원 탈퇴 실패:', err);
+      alert('회원 탈퇴 중 오류가 발생했습니다.');
+    }
+  };
+
   return (
     <div className="mypage-info">
       <Layout afterlogin={true}>
@@ -86,9 +95,39 @@ export default function MyPageInfo() {
                     />
                   </div>
 
-                  <div className="profile-info ms-4">
+                  <div className="profile-info ms-4" style={{ position: 'relative', width: '100%', paddingTop: '40px' }}>
                     <p><strong>생성일:</strong> {userInfo.regDate}</p>
                     <p><strong>로그인방식:</strong> {userInfo.loginType}</p>
+
+                    {/* 회원 탈퇴 버튼 */}
+                    <div style={{ marginTop: '40px', textAlign: 'right' }}>
+                      <button
+                        type="button"
+                        className="btn"
+                        style={{
+                          minWidth: '100px',
+                          padding: '6px 12px',
+                          backgroundColor: 'transparent',
+                          border: '2px solid #dc3545',
+                          color: '#dc3545',
+                          borderRadius: '6px',
+                          fontSize: '14px',
+                          fontWeight: 'bold',
+                          transition: 'all 0.3s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.backgroundColor = '#dc3545';
+                          e.target.style.color = 'white';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.backgroundColor = 'transparent';
+                          e.target.style.color = '#dc3545';
+                        }}
+                        onClick={handleDeleteAccount}
+                      >
+                        회원 탈퇴
+                      </button>
+                    </div>
                   </div>
                 </div>
 
