@@ -42,6 +42,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -219,10 +220,15 @@ public class OAuthServiceImp implements OAuthService {
     Map<String, Object> result = new HashMap<>();
 
     boolean status = false;
+    boolean account_exist = false;
 
-      try {
+    try {
 
-        System.out.println("oauthReqDTO = " + oauthReqDTO);
+      System.out.println("oauthReqDTO = " + oauthReqDTO);
+
+      Optional<OAuthClient> Chk_oAuthClient = oAuthClientRepository.findByEmailAndUseYN(oauthReqDTO.getEmail(), 'Y');
+
+      if(Chk_oAuthClient == null || Chk_oAuthClient.isEmpty()) {
 
         OAuthClient oAuthClient = OAuthClient.builder()
                 .name(oauthReqDTO.getName())
@@ -244,12 +250,21 @@ public class OAuthServiceImp implements OAuthService {
 
         }
         System.out.println("저장 성공: " + savedClient);
-        status = true;
-      } catch (Exception e) {
-        System.out.println("예외 발생: " + e.getMessage());
-        e.printStackTrace();
-        status = false;
+
       }
+      else {
+        System.out.println("계정 존재 : " + Chk_oAuthClient);
+        account_exist = true;
+        result.put("account_exist", account_exist);
+      }
+
+      status = true;
+
+    } catch (Exception e) {
+      System.out.println("예외 발생: " + e.getMessage());
+      e.printStackTrace();
+      status = false;
+    }
 
     result.put("status", status);
 

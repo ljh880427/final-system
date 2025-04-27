@@ -22,6 +22,12 @@ export default function SignUp() {
       const response = await axios.post(`${API_BASE}/signUp`, { email, name, pwd }, { withCredentials: true });
       console.log(response);
       if (response.data.status === true) {
+
+        if(response.data.account_exist === true){
+          alert('가입하려는 이메일이 존재합니다. 다른 이메일로 시도해주세요.');
+          return;
+        }
+        
         alert('회원가입이 완료되었습니다. 로그인 해주세요.');
         navigate('/signIn');
       }
