@@ -22,10 +22,10 @@ public class FileInfo {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer no;
 	
-	@Column(nullable = false, length = 100)
+	@Column(nullable = false, length = 255)
 	private String orgin;
 	
-	@Column(nullable = false, length = 100)
+	@Column(nullable = false, length = 255)
 	private String name;
 	
 	@Column(nullable = false, length = 255)
