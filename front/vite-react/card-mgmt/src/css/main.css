@@ -351,6 +351,11 @@ body, html {
       width:400px;
   }
 
+  input {
+    width: 100%; /* 화면 크기가 작을 때 입력 필드의 가로 길이를 100%로 설정 */
+    max-width: 200px; /* 최대 너비를 350px로 설정하여 너무 커지지 않도록 제한 */
+  }
+
 }
 
 @media (max-width: 1121px) {
