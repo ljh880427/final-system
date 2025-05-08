@@ -267,6 +267,7 @@ const fetchData = async (keyword = '') => {
                         searchCards();
                       }
                     }}
+                    id="searchinput"
                     value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}
                     placeholder="이름, 직위, 회사명으로 명함을 검색 해주세요"
