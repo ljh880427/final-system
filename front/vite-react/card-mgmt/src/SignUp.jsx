@@ -43,7 +43,7 @@ export default function SignUp() {
         <div className="container text-center">
           <form className="form-signin" onSubmit={handleSubmit}>
             <h2 className="form-signin-heading">Sign up</h2>
-            <small className="text-muted" style={{ fontSize: '11px' }}>Connect Cafe & Blog with your favorite social network</small>
+            <small className="text-muted" style={{ fontSize: '11px' }}>Connect card mgmt with your favorite social network</small>
             <br /><br />
 
             <p>
@@ -55,7 +55,7 @@ export default function SignUp() {
               </a>
             </p>
 
-            <small className="text-muted" style={{ fontSize: '11px' }}>Or sign in with cafe & blog</small>
+            <small className="text-muted" style={{ fontSize: '11px' }}>Or sign in with card mgmt</small>
             <br /><br />
 
             <input
@@ -93,7 +93,7 @@ export default function SignUp() {
               Sign up
             </button>
             <br />
-            <small className="create-account text-muted" style={{ fontSize: '11px', marginBottom: '10px' }}>Do you have a cafe & blog or social network account?</small>
+            <small className="create-account text-muted" style={{ fontSize: '11px', marginBottom: '10px' }}>Do you have a card mgmt or social network account?</small>
             <a href="/signIn">
               <button
                 className="btn btn-sm btn-outline-secondary"

@@ -65,7 +65,7 @@ export default function SignIn() {
           <form className="form-signin" onSubmit={handleSubmit}>
             <h2 className="form-signin-heading">Sign in</h2>
             <small className="text-muted" style={{ fontSize: '11px' }}>
-              Connect Cafe & Blog with your favorite social network
+              Connect card mgmt with your favorite social network
             </small>
             <br /><br />
 
@@ -79,7 +79,7 @@ export default function SignIn() {
             </p>    
 
             <small className="text-muted" style={{ fontSize: '11px' }}>
-              Or sign in with cafe & blog
+              Or sign in with card mgmt
             </small>
             <br /><br />
 
@@ -113,7 +113,7 @@ export default function SignIn() {
             </button>
             <br />
             <small className="create-account text-muted" style={{ fontSize: '11px', marginBottom: '10px' }}>
-              Don't have a cafe & blog or social network account?
+              Don't have a card mgmt or social network account?
             </small>
             <a href="/signUp">
               <button
