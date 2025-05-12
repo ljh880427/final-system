@@ -6,6 +6,7 @@ import com.java.oauth2.dto.FileResDTO;
 import com.java.oauth2.repository.FileInfoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -69,9 +70,26 @@ public class FileServiceImp implements FileService {
 					.concat("/" + userNo);
 			System.out.println("attachPath : " + attachPath);
 			try {
+				File dir = new File(attachPath);
+				if (!dir.exists()) dir.mkdirs();
 				File newFile = new File(attachPath.concat("/").concat(name).concat(ext));
-				if(!newFile.exists()){newFile.mkdirs();}
-				file.transferTo(newFile);
+
+				// 이미지 파일이면 리사이징 후 저장
+				if (mediaType != null && (
+						mediaType.contains("image/jpeg") ||
+								mediaType.contains("image/png") ||
+								mediaType.contains("image/gif"))) {
+
+					Thumbnails.of(file.getInputStream())
+							.size(1000, 568)
+							.keepAspectRatio(true) // 비율 유지
+							.outputQuality(0.8)
+							.toFile(newFile);
+				} else {
+					// 일반 파일은 그대로 저장
+					file.transferTo(newFile);
+				}
+
 				FileInfo fileInfo = FileInfo.builder()
 						.orgin(orgin)
 						.name(name)
@@ -93,7 +111,6 @@ public class FileServiceImp implements FileService {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
 		}
 		return FileResDTO.builder()
 				.success(success)
