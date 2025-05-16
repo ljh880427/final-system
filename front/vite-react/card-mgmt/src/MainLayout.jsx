@@ -38,7 +38,7 @@ const handleDelete = async (cardNo, event) => {
   event.preventDefault(); // 기본 동작 방지
   event.stopPropagation(); // 이벤트 전파 방지
 
-  if (!window.confirm("삭제 하시겠습니까?")) {
+  if (!window.confirm("삭제하시겠습니까?")) {
     return; // 사용자가 취소하면 함수 종료
   }
 
